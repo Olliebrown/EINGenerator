@@ -1,0 +1,48 @@
+{
+  "name": "eingenerator",
+  "version": "0.1.0",
+  "description": "Utility to generate anonymous identification number for voters to use in an election.",
+  "main": "server/server.js",
+  "type": "module",
+  "scripts": {
+    "devServer": "env DEBUG=server:*,mongo:* nodemon --watch server server/server.js",
+    "devClient": "run-s cleanClient devBundle",
+    "server": "node server/server.js",
+    "client": "run-s cleanClient bundle",
+    "cleanClient": "rm -f ./public/bundle.*",
+    "devBundle": "esbuild --watch --bundle --sourcemap --target=es6 --define:process.env.NODE_ENV=\\\"development\\\" --outdir=./public client/app.jsx",
+    "bundle": "esbuild --bundle --minify --target=es6 --define:process.env.NODE_ENV=\\\"production\\\" --outdir=./public client/app.jsx",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Seth Berrier",
+  "license": "MIT",
+  "devDependencies": {
+    "@date-io/moment": "^1.3.13",
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.58",
+    "@material-ui/pickers": "^3.3.10",
+    "@material-ui/styles": "^4.11.3",
+    "esbuild": "^0.11.11",
+    "eslint": "^7.24.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.3.1",
+    "eslint-plugin-react": "^7.23.2",
+    "moment": "^2.29.1",
+    "nodemon": "^2.0.7",
+    "npm-run-all": "^4.1.5",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "debug": "^4.3.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongodb": "^3.6.6",
+    "sqlite": "^4.0.21",
+    "sqlite3": "^5.0.2"
+  }
+}

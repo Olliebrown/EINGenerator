@@ -1,0 +1,82 @@
+[
+  {
+    "id": 9001,
+    "name": "testElection1",
+    "description": "Test election number 1",
+    "startDate": "1820-02-29T13:26:56.482Z",
+    "endDate": "1820-12-29T13:13:53.978Z",
+    "poolID": 9013
+  },
+  {
+    "id": 9002,
+    "name": "testElection2",
+    "description": "Test election number 2",
+    "startDate": "1820-10-08T13:05:42.163Z",
+    "endDate": "1820-12-27T23:08:50.293Z",
+    "poolID": 9002
+  },
+  {
+    "id": 9003,
+    "name": "testElection3",
+    "description": "Test election number 3",
+    "startDate": "1820-04-03T11:39:40.838Z",
+    "endDate": "1820-11-30T20:30:52.848Z",
+    "poolID": 9011
+  },
+  {
+    "id": 9004,
+    "name": "testElection4",
+    "description": "Test election number 4",
+    "startDate": "1820-07-13T15:53:04.334Z",
+    "endDate": "1820-11-03T10:01:23.297Z",
+    "poolID": 9003
+  },
+  {
+    "id": 9005,
+    "name": "testElection5",
+    "description": "Test election number 5",
+    "startDate": "1820-04-17T09:43:19.979Z",
+    "endDate": "1820-11-23T00:36:55.268Z",
+    "poolID": 9018
+  },
+  {
+    "id": 9006,
+    "name": "testElection6",
+    "description": "Test election number 6",
+    "startDate": "1820-07-17T07:19:38.920Z",
+    "endDate": "1820-12-01T09:26:47.531Z",
+    "poolID": 9002
+  },
+  {
+    "id": 9007,
+    "name": "testElection7",
+    "description": "Test election number 7",
+    "startDate": "1820-02-12T17:52:23.853Z",
+    "endDate": "1820-08-09T11:30:38.174Z",
+    "poolID": 9005
+  },
+  {
+    "id": 9008,
+    "name": "testElection8",
+    "description": "Test election number 8",
+    "startDate": "1820-02-05T16:57:32.879Z",
+    "endDate": "1820-08-20T18:45:18.133Z",
+    "poolID": 9010
+  },
+  {
+    "id": 9009,
+    "name": "testElection9",
+    "description": "Test election number 9",
+    "startDate": "1820-06-05T22:49:04.282Z",
+    "endDate": "1820-10-21T18:46:42.246Z",
+    "poolID": 9014
+  },
+  {
+    "id": 9010,
+    "name": "testElection10",
+    "description": "Test election number 10",
+    "startDate": "1820-01-29T06:39:10.137Z",
+    "endDate": "1820-03-24T18:00:58.404Z",
+    "poolID": 9012
+  }
+]
