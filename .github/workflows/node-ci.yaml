@@ -37,7 +37,7 @@ jobs:
       run: npm test
 
     - name: Archive production client
-        uses: actions/upload-artifact@v2
-        with:
-          name: production-client
-          path: public/app.js
+      uses: actions/upload-artifact@v2
+      with:
+        name: production-client
+        path: public/app.js
