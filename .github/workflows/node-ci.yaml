@@ -17,6 +17,7 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 14.x
+
     - name: Cache Node.js modules
       uses: actions/cache@v2
       with:
@@ -26,6 +27,17 @@ jobs:
         restore-keys:
           ${{ runner.OS }}-node-
           ${{ runner.OS }}-
-    - run: npm ci
-    - run: npm run client
-    - run: npm test
+
+    - name: Install & Build
+      run: |
+        npm ci
+        npm run client
+
+    - name: Run Tests
+      run: npm test
+
+    - name: Archive production client
+        uses: actions/upload-artifact@v2
+        with:
+          name: production-client
+          path: public/app.js
