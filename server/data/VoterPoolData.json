@@ -1,6 +1,6 @@
 [
   {
-    "id": 9001,
+    "id": "9001",
     "name": "testPool1",
     "description": "Test voting pool number 1",
     "members": [
@@ -57,7 +57,7 @@
     ]
   },
   {
-    "id": 9002,
+    "id": "9002",
     "name": "testPool2",
     "description": "Test voting pool number 2",
     "members": [
@@ -114,7 +114,7 @@
     ]
   },
   {
-    "id": 9003,
+    "id": "9003",
     "name": "testPool3",
     "description": "Test voting pool number 3",
     "members": [
@@ -171,7 +171,7 @@
     ]
   },
   {
-    "id": 9004,
+    "id": "9004",
     "name": "testPool4",
     "description": "Test voting pool number 4",
     "members": [
@@ -228,7 +228,7 @@
     ]
   },
   {
-    "id": 9005,
+    "id": "9005",
     "name": "testPool5",
     "description": "Test voting pool number 5",
     "members": [
@@ -285,7 +285,7 @@
     ]
   },
   {
-    "id": 9006,
+    "id": "9006",
     "name": "testPool6",
     "description": "Test voting pool number 6",
     "members": [
@@ -342,7 +342,7 @@
     ]
   },
   {
-    "id": 9007,
+    "id": "9007",
     "name": "testPool7",
     "description": "Test voting pool number 7",
     "members": [
@@ -399,7 +399,7 @@
     ]
   },
   {
-    "id": 9008,
+    "id": "9008",
     "name": "testPool8",
     "description": "Test voting pool number 8",
     "members": [
@@ -456,7 +456,7 @@
     ]
   },
   {
-    "id": 9009,
+    "id": "9009",
     "name": "testPool9",
     "description": "Test voting pool number 9",
     "members": [
@@ -513,7 +513,7 @@
     ]
   },
   {
-    "id": 9010,
+    "id": "9010",
     "name": "testPool10",
     "description": "Test voting pool number 10",
     "members": [
@@ -570,7 +570,7 @@
     ]
   },
   {
-    "id": 9011,
+    "id": "9011",
     "name": "testPool11",
     "description": "Test voting pool number 11",
     "members": [
@@ -627,7 +627,7 @@
     ]
   },
   {
-    "id": 9012,
+    "id": "9012",
     "name": "testPool12",
     "description": "Test voting pool number 12",
     "members": [
@@ -684,7 +684,7 @@
     ]
   },
   {
-    "id": 9013,
+    "id": "9013",
     "name": "testPool13",
     "description": "Test voting pool number 13",
     "members": [
@@ -741,7 +741,7 @@
     ]
   },
   {
-    "id": 9014,
+    "id": "9014",
     "name": "testPool14",
     "description": "Test voting pool number 14",
     "members": [
@@ -798,7 +798,7 @@
     ]
   },
   {
-    "id": 9015,
+    "id": "9015",
     "name": "testPool15",
     "description": "Test voting pool number 15",
     "members": [
@@ -855,7 +855,7 @@
     ]
   },
   {
-    "id": 9016,
+    "id": "9016",
     "name": "testPool16",
     "description": "Test voting pool number 16",
     "members": [
@@ -912,7 +912,7 @@
     ]
   },
   {
-    "id": 9017,
+    "id": "9017",
     "name": "testPool17",
     "description": "Test voting pool number 17",
     "members": [
@@ -969,7 +969,7 @@
     ]
   },
   {
-    "id": 9018,
+    "id": "9018",
     "name": "testPool18",
     "description": "Test voting pool number 18",
     "members": [
@@ -1026,7 +1026,7 @@
     ]
   },
   {
-    "id": 9019,
+    "id": "9019",
     "name": "testPool19",
     "description": "Test voting pool number 19",
     "members": [
@@ -1083,7 +1083,7 @@
     ]
   },
   {
-    "id": 9020,
+    "id": "9020",
     "name": "testPool20",
     "description": "Test voting pool number 20",
     "members": [

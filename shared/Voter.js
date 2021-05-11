@@ -3,18 +3,31 @@ const debug = Debug('server:Voter')
 
 class Voter {
   constructor (param) {
-    // Handle string parameter
+    // Handle name-email string parsing
     if (typeof param === 'string') {
       param = Voter.parseEmailString(param)
-    } else if (typeof param !== 'object') {
+    }
+
+    // Ignore anything that's not an object
+    if (typeof param !== 'object') {
       throw new Error('Unknown parameter type provided to Voter constructor')
     }
 
+    // Check for required parameters
+    if (!param.firstName || !param.email) {
+      throw new Error('First name and email are required for a Voter')
+    }
+
     // Extract data
-    const { firstName, lastName, email } = param
+    const { firstName, lastName, email, id, _id } = param
     this.firstName = firstName || ''
     this.lastName = lastName || ''
     this.email = email || ''
+    this.id = _id || id || '*'
+  }
+
+  toString () {
+    return `${this.lastName}, ${this.firstName} <${this.email}>`
   }
 
   stringify () {
