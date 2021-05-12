@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
 import Fab from '@material-ui/core/Fab'
@@ -46,6 +46,9 @@ const useStyles = makeStyles((theme) => ({
 const SKELETON_COUNT = 5
 
 export default function ExpandableList (props) {
+  // Destructure props
+  const { itemsData, secondaryData, type, refreshData } = props
+
   // Generate style class names
   const classes = useStyles()
 
@@ -67,7 +70,7 @@ export default function ExpandableList (props) {
   }
 
   // Is the list empty?
-  if (props.itemsData.length < 1) {
+  if (itemsData.length < 1) {
     return (
       <div className={classes.root}>
         <Grid
@@ -96,7 +99,7 @@ export default function ExpandableList (props) {
   }
 
   // Loop and generate Accordion elements
-  const listItems = props.itemsData.map((itemData) => {
+  const listItems = itemsData.map((itemData) => {
     const simpleID = itemData._id.slice(-6)
     return (
       <Accordion
@@ -106,22 +109,22 @@ export default function ExpandableList (props) {
         onChange={handleChange(`panel${simpleID}`)}
       >
         <AccordionSummary
-          aria-controls={`${props.type}-panel${simpleID}-content`}
+          aria-controls={`${type}-panel${simpleID}-content`}
           expandIcon={<ExpandMoreIcon />}
-          id={`${props.type}-panel${simpleID}-header`}
+          id={`${type}-panel${simpleID}-header`}
         >
           <Typography className={classes.heading}>
             {itemData.name}
           </Typography>
 
           <Typography className={classes.secondaryHeading}>
-            {`${props.type} ${simpleID}`}
+            {`${type} ${simpleID}`}
           </Typography>
         </AccordionSummary>
 
         <ItemViewDetails
           itemID={itemData._id}
-          type={props.type}
+          type={type}
         />
       </Accordion>
     )
@@ -138,12 +141,12 @@ export default function ExpandableList (props) {
         </Fab>
       </div>
 
-      {(props.type === 'pool' &&
-        <PoolForm modalOpen={modalOpen} refreshData={props.refreshData} onModalToggle={handleModalToggle} />
+      {(type === 'pool' &&
+        <PoolForm modalOpen={modalOpen} refreshData={refreshData} onModalToggle={handleModalToggle} />
       )}
 
-      {(props.type === 'election' &&
-        <ElectionForm modalOpen={modalOpen} refreshData={props.refreshData} onModalToggle={handleModalToggle} voterPools={props.secondaryData} />
+      {(type === 'election' &&
+        <ElectionForm modalOpen={modalOpen} refreshData={refreshData} onModalToggle={handleModalToggle} voterPools={secondaryData} />
       )}
     </React.Fragment>
   )
@@ -169,5 +172,6 @@ ExpandableList.propTypes = {
 ExpandableList.defaultProps = {
   itemsData: [],
   secondaryData: [],
-  type: 'none'
+  type: 'none',
+  refreshData: null
 }

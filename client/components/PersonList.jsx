@@ -21,21 +21,30 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function PersonList (props) {
+  // Destructure props
+  const { people } = props
+
   const classes = useStyles()
 
-  if (props.people.length < 1) {
+  if (people.length < 1) {
     return (
       <div className={classes.root}>
-        <Typography variant='body1'>(no members)</Typography>
+        <Typography variant='body1'>
+          {'(no members)'}
+        </Typography>
       </div>
     )
   }
 
   return (
     <List className={classes.root}>
-      {props.people.map((person, index) => (
+      {people.map((person, index) => (
         <ListItem key={index}>
-          <ListItemAvatar><Avatar><ImageIcon /></Avatar></ListItemAvatar>
+          <ListItemAvatar>
+            <Avatar>
+              <ImageIcon />
+            </Avatar>
+          </ListItemAvatar>
           <ListItemText primary={`${person.firstName} ${person.lastName}`} secondary={person.email} />
         </ListItem>
       ))}

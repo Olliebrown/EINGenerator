@@ -8,6 +8,11 @@
         "plugin:react/all",
         "standard"
     ],
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    },   
     "parserOptions": {
         "ecmaFeatures": {
             "jsx": true
@@ -19,9 +24,24 @@
         "react"
     ],
     "rules": {
-        "react/jsx-indent": [2, 2],
-        "react/jsx-indent-props": [2, 2],
-        "react/forbid-component-props": [true, { "forbid": ["style"] }],
+        "react/no-multi-comp": "off",
+        "react/jsx-indent": ["warn", 2],
+        "react/jsx-indent-props": ["warn", 2],
+        "react/jsx-newline": "off",
+        "react/jsx-max-depth": "off",
+        "react/forbid-component-props": ["warn", { "forbid": ["style"] }],
+        "react/sort-prop-types": "off",
+        "react/jsx-curly-brace-presence": "off",
+        "react/jsx-sort-default-props": "off",
+        "react/jsx-props-no-spreading": "off",
+        "react/jsx-max-props-per-line": "off",
+        "react/jsx-sort-props": "off",
+        "react/jsx-no-bind": "off",
+        "react/require-optimization": "off",
+        "react/sort-comp": "off",
+        "react/static-property-placement": "off",
+        "react/jsx-fragments": "off",
+        "react/no-array-index-key": "off",
         "import/no-unresolved": [2],
         "indent": "warn",
         "quotes": "warn",
@@ -34,6 +54,7 @@
         "brace-style": "warn",
         "curly": "warn",
         "no-multiple-empty-lines": "warn",
+        "no-throw-literal": "off",
         "operator-linebreak": "warn",
         "one-var": "warn",
         "no-cond-assign": "warn",

@@ -16,9 +16,11 @@ import moment from 'moment'
 import DialogForm from './DialogForm.jsx'
 
 import * as DATA from '../helpers/dataHelper.js'
-import Election from '../../shared/Election.js'
 
 export default function ElectionForm (props) {
+  // Destructure props
+  const { modalOpen, onModalToggle, refreshData, voterPools } = props
+
   // State for managed form inputs
   const [electionName, updateElectionName] = useState('')
   const [electionDescription, updateElectionDescription] = useState('')
@@ -57,23 +59,24 @@ export default function ElectionForm (props) {
       endDate: endDate.toDate(),
       poolID: electionPool
     })
-    if (props.refreshData) {
-      props.refreshData()
+    if (refreshData) {
+      refreshData()
     }
   }
 
   return (
     <DialogForm
       addLabel="Create Election"
-      onToggle={props.onModalToggle}
-      open={props.modalOpen}
+      onToggle={onModalToggle}
+      open={modalOpen}
       onFormSubmit={formSubmitted}
       title="Add New Election"
-      type="election">
+      type="election"
+    >
 
       <DialogContent>
         <DialogContentText>
-          To create a new Election, please enter the information below.
+          {'To create a new Election, please enter the information below.'}
         </DialogContentText>
         <form noValidate autoComplete="off">
           <Grid container spacing={3}>
@@ -84,7 +87,7 @@ export default function ElectionForm (props) {
                 label="Election Name"
                 type="text"
                 variant="outlined"
-                helperText={nameError?'Name cannot be blank':' '}
+                helperText={nameError ? 'Name cannot be blank' : ' '}
                 error={nameError}
                 fullWidth
                 value={electionName}
@@ -135,7 +138,9 @@ export default function ElectionForm (props) {
             </Grid>
             <Grid item sm={12}>
               <FormControl variant="outlined" fullWidth>
-                <InputLabel id="poolSelectLabel">Voter Pool</InputLabel>
+                <InputLabel id="poolSelectLabel">
+                  {'Voter Pool'}
+                </InputLabel>
                 <Select
                   labelId="poolSelectLabel"
                   id="poolSelect"
@@ -143,8 +148,10 @@ export default function ElectionForm (props) {
                   onChange={(e) => { updateElectionPool(e.target.value) }}
                   label="Voter Pool"
                 >
-                  { props.voterPools.map((pool) => (
-                    <MenuItem key={pool._id} value={pool._id}>{pool.name}</MenuItem>
+                  { voterPools.map((pool) => (
+                    <MenuItem key={pool._id} value={pool._id}>
+                      {pool.name}
+                    </MenuItem>
                   )) }
                 </Select>
               </FormControl>
@@ -169,5 +176,6 @@ ElectionForm.propTypes = {
 }
 
 ElectionForm.defaultProps = {
-  voterPools: []
+  voterPools: [],
+  refreshData: null
 }

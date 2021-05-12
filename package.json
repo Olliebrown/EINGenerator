@@ -12,6 +12,7 @@
     "cleanClient": "rm -f ./public/bundle.*",
     "devBundle": "esbuild --watch --bundle --sourcemap --target=es6 --define:process.env.NODE_ENV=\\\"development\\\" --outdir=./public client/app.jsx",
     "bundle": "esbuild --bundle --minify --target=es6 --define:process.env.NODE_ENV=\\\"production\\\" --outdir=./public client/app.jsx",
+    "lint": "eslint . --ext .js,.mjs,.jsx",
     "test": "mocha"
   },
   "author": "Seth Berrier",

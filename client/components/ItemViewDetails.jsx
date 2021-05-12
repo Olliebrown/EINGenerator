@@ -22,6 +22,9 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function ItemViewDetails (props) {
+  // Destructure props
+  const { type, itemID } = props
+
   // Generate unique class names
   const classes = useStyles()
 
@@ -30,20 +33,20 @@ export default function ItemViewDetails (props) {
 
   // Function to asynchronously retrieve details
   const retrieveDetails = async () => {
-    if (props.type === 'none' || props.itemID === '') {
-      console.error(`Cannot retrieve details for "${props.type}" "${props.itemID}"`)
+    if (type === 'none' || itemID === '') {
+      console.error(`Cannot retrieve details for "${type}" "${itemID}"`)
       return
     }
 
     // Try to retrieve data
     try {
-      console.log(`Retrieve details ${props.type} ${props.itemID}`)
-      const newDetails = await DATA.getItem(props.type, props.itemID)
+      console.log(`Retrieve details ${type} ${itemID}`)
+      const newDetails = await DATA.getItem(type, itemID)
       setItemDetails(newDetails)
     } catch (err) {
-      console.error(`Failed to retrieve "${props.type}" type details for ${props.itemID}`)
+      console.error(`Failed to retrieve "${type}" type details for ${itemID}`)
       console.error(err)
-      alert(`WARNING: Failed to retrieve ${props.type} details (see console)`)
+      alert(`WARNING: Failed to retrieve ${type} details (see console)`)
     }
   }
 
@@ -53,7 +56,7 @@ export default function ItemViewDetails (props) {
   if (itemDetails === null) {
     return (
       <AccordionDetails>
-        <Skeleton width='100%' height={props.type === 'pool' ? 500 : 50} variant='rect' animation='wave' />
+        <Skeleton width='100%' height={type === 'pool' ? 500 : 50} variant='rect' animation='wave' />
       </AccordionDetails>
     )
   }
@@ -63,18 +66,21 @@ export default function ItemViewDetails (props) {
     <AccordionDetails>
       <Grid container spacing={1}>
         <Grid item sm={12}>
-          <Typography variant='body1'>{itemDetails.description}</Typography>
+          <Typography variant='body1'>
+            {itemDetails.description}
+          </Typography>
         </Grid>
         <Grid item sm={12}>
-          {(props.type === 'pool' &&
+          {(type === 'pool' &&
             <PersonList people={itemDetails.members} />
           )}
-          {(props.type === 'election' &&
+          {(type === 'election' &&
             <Typography>
-              Runs from
+              {'Runs from'}
               <span className={classes.dateStyle}>
                 {moment(itemDetails.startDate).format(FMT_STRING)}
-              </span> to
+              </span>
+              {'to'}
               <span className={classes.dateStyle}>
                 {moment(itemDetails.endDate).format(FMT_STRING)}
               </span>

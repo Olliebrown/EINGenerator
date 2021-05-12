@@ -79,7 +79,7 @@ export default function EINGeneratorApp (props) {
         </Tabs>
       </AppBar>
       <TabPanel value={currentTabIndex} index={0}>
-        <ExpandableList type="pool"  refreshData={retrievePoolData} itemsData={poolData} />
+        <ExpandableList type="pool" refreshData={retrievePoolData} itemsData={poolData} />
       </TabPanel>
       <TabPanel value={currentTabIndex} index={1}>
         <ExpandableList type="election" refreshData={retrieveElectionData} itemsData={electionData} secondaryData={poolData} />

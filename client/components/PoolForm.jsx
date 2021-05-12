@@ -22,6 +22,9 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function PoolForm (props) {
+  // Destructure props
+  const { modalOpen, onModalToggle, refreshData } = props
+
   // Generate style class names
   const classes = useStyles()
 
@@ -53,7 +56,7 @@ export default function PoolForm (props) {
       members = rawVoterList.split(/\r?\n/g)
       try {
         members = members.map((item) => (Voter.parseEmailString(item)))
-      } catch(err) {
+      } catch (err) {
         updateVoterListError('Format Invalid')
         isReady = false
       }
@@ -64,15 +67,16 @@ export default function PoolForm (props) {
 
     // Attempt to create a pool object
     const newPool = new Pool({
-      id: '*', name: poolName,
+      id: '*',
+      name: poolName,
       description: poolDescription,
       members
     })
 
     // Attempt to insert the pool object
     await DATA.newItem('pool', newPool)
-    if (props.refreshData) {
-      props.refreshData()
+    if (refreshData) {
+      refreshData()
     }
   }
 
@@ -80,14 +84,15 @@ export default function PoolForm (props) {
   return (
     <DialogForm
       addLabel="Create Voter Pool"
-      onToggle={props.onModalToggle}
-      open={props.modalOpen}
+      onToggle={onModalToggle}
+      open={modalOpen}
       onFormSubmit={formSubmitted}
       title="Add New Voter Pool"
-      type="pool">
+      type="pool"
+    >
       <DialogContent>
         <DialogContentText>
-          To create a new voter pool, please enter the information below.
+          {'To create a new voter pool, please enter the information below.'}
         </DialogContentText>
         <form noValidate autoComplete="off">
           <Grid container spacing={3}>
@@ -98,7 +103,7 @@ export default function PoolForm (props) {
                 label="Voter Pool Name"
                 type="text"
                 variant="outlined"
-                helperText={nameError?'Name cannot be blank':' '}
+                helperText={nameError ? 'Name cannot be blank' : ' '}
                 error={nameError}
                 fullWidth
                 value={poolName}
@@ -130,13 +135,17 @@ export default function PoolForm (props) {
                 fullWidth
                 value={rawVoterList}
                 onChange={(e) => { updateRawVoterList(e.target.value) }}
-                onBlur={() => { updateVoterListError(' ')}}
+                onBlur={() => { updateVoterListError(' ') }}
               />
             </Grid>
             <Grid item sm={12}>
               <Typography variant="subtitle1" className={classes.instructions}>
-                Please enter ONE voter per line<br/>
-                Enter in the form: <code>lastname, firstname &lt;email&gt;</code>
+                {'Please enter ONE voter per line'}
+                <br />
+                {'Enter in the form: '}
+                <code>
+                  {'lastName, firstName &lt;email&gt;'}
+                </code>
               </Typography>
             </Grid>
           </Grid>
@@ -150,4 +159,8 @@ PoolForm.propTypes = {
   modalOpen: PropTypes.bool.isRequired,
   onModalToggle: PropTypes.func.isRequired,
   refreshData: PropTypes.func
+}
+
+PoolForm.defaultProps = {
+  refreshData: null
 }

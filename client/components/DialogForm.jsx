@@ -11,16 +11,19 @@ const SlideTransition = React.forwardRef(function SlideTransition (props, ref) {
   return <Slide direction="up" ref={ref} {...props} />
 })
 
-const FormDialog = React.forwardRef(function FormDialog (props, ref) {
+function FormDialog (props) {
+  // Destructure props
+  const { open, onToggle, onFormSubmit, children, title, addLabel } = props
+
   const handleCancel = () => {
-    props.onToggle(false)
+    onToggle(false)
   }
 
   const handleConfirm = async () => {
-    if (props.onFormSubmit) {
+    if (onFormSubmit) {
       try {
-        await props.onFormSubmit()
-        props.onToggle(false)
+        await onFormSubmit()
+        onToggle(false)
       } catch (err) {
         if (err) {
           window.alert('An error occurred')
@@ -32,24 +35,25 @@ const FormDialog = React.forwardRef(function FormDialog (props, ref) {
 
   return (
     <div>
-      <Dialog open={props.open} onClose={handleCancel} aria-labelledby="poolForm-dialog-title" TransitionComponent={SlideTransition}>
-        <DialogTitle id="poolForm-dialog-title">{props.title}</DialogTitle>
-        {props.children}
+      <Dialog open={open} onClose={handleCancel} aria-labelledby="poolForm-dialog-title" TransitionComponent={SlideTransition}>
+        <DialogTitle id="poolForm-dialog-title">
+          {title}
+        </DialogTitle>
+        {children}
         <DialogActions>
           <Button onClick={handleCancel} color="primary">
-            Cancel
+            {'Cancel'}
           </Button>
           <Button onClick={handleConfirm} color="primary">
-            {props.addLabel}
+            {addLabel}
           </Button>
         </DialogActions>
       </Dialog>
     </div>
   )
-})
+}
 
 FormDialog.propTypes = {
-  type: PropTypes.string,
   open: PropTypes.bool.isRequired,
   onToggle: PropTypes.func.isRequired,
   onFormSubmit: PropTypes.func,
@@ -59,9 +63,10 @@ FormDialog.propTypes = {
 }
 
 FormDialog.defaultProps = {
-  type: 'none',
   title: 'Add New Item',
-  addLabel: 'Add Item'
+  addLabel: 'Add Item',
+  onFormSubmit: null,
+  children: null
 }
 
 export default FormDialog
