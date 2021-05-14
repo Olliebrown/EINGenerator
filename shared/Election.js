@@ -25,7 +25,7 @@ class Election {
 
     this.name = name || ''
     this.description = description || ''
-    this.EIN = EIN || []
+    this.EIN = EIN || null
   }
 
   makeNewEINList (myPool, digits) {

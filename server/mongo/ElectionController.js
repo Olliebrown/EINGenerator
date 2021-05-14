@@ -4,6 +4,17 @@ import MongoDB from 'mongodb'
 import Debug from 'debug'
 const debug = Debug('mongo:ElectionController')
 
+// CAUTION Drop entire election collection
+export function clearElectionList () {
+  return new Promise((resolve, reject) => {
+    runQuery((db) => {
+      db.collection('elections').drop()
+        .then((data) => { debug('cleared election list'); return resolve(data) })
+        .catch((err) => { debug('Error clearing election list', err); return reject(err) })
+    })
+  })
+}
+
 // Store and return the list of elections
 export function getElectionList () {
   return new Promise((resolve, reject) => {
@@ -55,34 +66,71 @@ export function getElection (id) {
 }
 
 // Add new election
-export async function addToElectionList (newElection) {
-  return new Promise((resolve, reject) => {
-    // Sanitize object
-    const election = {
-      name: newElection.name,
-      description: newElection.description,
-      startDate: newElection.startDate,
-      endDate: newElection.endDate,
-      poolID: new MongoDB.ObjectID(newElection.poolID)
+export async function addToElectionList (newElections) {
+  // Make sure it's always an array
+  if (!Array.isArray(newElections)) {
+    newElections = [newElections]
+  }
+
+  // Sanitize documents before inserting
+  const elections = newElections.map((newElection) => ({
+    name: newElection.name,
+    description: newElection.description,
+    startDate: newElection.startDate,
+    endDate: newElection.endDate,
+    poolID: new MongoDB.ObjectID(newElection.poolID),
+    EIN: newElection.EIN
+  }))
+
+  // Get list of only poolIDs (unique)
+  let poolIDs = []
+  elections.forEach((election) => {
+    if (!poolIDs.includes(election.poolID.toString())) {
+      poolIDs.push(election.poolID.toString())
     }
+  })
+  poolIDs = poolIDs.map((id) => (new MongoDB.ObjectID(id)))
 
-    debug(election)
-
+  return new Promise((resolve, reject) => {
     // Run the query to insert the data
     runQuery(async (db) => {
       try {
-        // Validate the pool id more
-        const result = await db.collection('pools').findOne({ _id: election.poolID })
-        if (result === null) {
-          return reject(new Error('Invalid Pool ID'))
+        // Validate the pool ids
+        const result1 = await db.collection('pools').find({ _id: { $in: poolIDs } }).project({ _id: 1 }).toArray()
+        if (result1.length !== poolIDs.length) {
+          return reject(new Error(`One or more invalid Pool IDs (${poolIDs.length} expected, got ${result1.length})`))
         }
 
-        // Insert the election
-        const newDoc = await db.collection('elections').insertOne(election)
-        debug('Inserted an election')
-        return resolve(newDoc.insertedId)
+        // Insert the elections
+        const result2 = await db.collection('elections').insertMany(elections)
+        debug(`Inserted ${result2.insertedIds.length} election(s)`)
+        return resolve(result2.insertedIds)
       } catch (err) {
-        debug('Error inserting election', err)
+        debug('Error inserting election(s)', err)
+        return reject(err)
+      }
+    })
+  })
+}
+
+// Update a specific election
+export function updateElection (id, updatedElection) {
+  return new Promise((resolve, reject) => {
+    // Run the query itself
+    runQuery(async (db) => {
+      try {
+        const result = await db.collection('elections').updateOne(
+          { _id: new MongoDB.ObjectID(id) },
+          updatedElection
+        )
+        if (result.modifiedCount !== 1) {
+          debug('Election update failed')
+          return reject(new Error('Failed to update election'))
+        }
+        debug('Election Updated')
+        return resolve(result)
+      } catch (err) {
+        debug('Error updating election', err)
         return reject(err)
       }
     })

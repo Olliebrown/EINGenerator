@@ -6,7 +6,7 @@
     "endDate": "1820-12-31T13:49:00.134Z",
     "name": "testElection1",
     "description": "Test election number 1",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9002",
@@ -259,7 +259,7 @@
     "endDate": "1820-07-26T05:27:48.226Z",
     "name": "testElection3",
     "description": "Test election number 3",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9004",
@@ -268,7 +268,7 @@
     "endDate": "1820-12-17T19:39:41.938Z",
     "name": "testElection4",
     "description": "Test election number 4",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9005",
@@ -329,7 +329,7 @@
     "endDate": "1820-08-04T23:58:53.756Z",
     "name": "testElection6",
     "description": "Test election number 6",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9007",
@@ -444,7 +444,7 @@
     "endDate": "1820-07-30T08:37:02.877Z",
     "name": "testElection8",
     "description": "Test election number 8",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9009",
@@ -453,7 +453,7 @@
     "endDate": "1820-03-15T13:55:25.569Z",
     "name": "testElection9",
     "description": "Test election number 9",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9010",
@@ -462,7 +462,7 @@
     "endDate": "1820-04-23T04:12:15.876Z",
     "name": "testElection10",
     "description": "Test election number 10",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9011",
@@ -842,7 +842,7 @@
     "endDate": "1820-12-21T21:23:42.201Z",
     "name": "testElection13",
     "description": "Test election number 13",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9014",
@@ -1056,7 +1056,7 @@
     "endDate": "1820-09-30T13:40:53.659Z",
     "name": "testElection15",
     "description": "Test election number 15",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9016",
@@ -1234,7 +1234,7 @@
     "endDate": "1820-03-13T06:19:19.115Z",
     "name": "testElection17",
     "description": "Test election number 17",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9018",
@@ -1243,7 +1243,7 @@
     "endDate": "1820-12-29T04:27:51.611Z",
     "name": "testElection18",
     "description": "Test election number 18",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9019",
@@ -1472,7 +1472,7 @@
     "endDate": "1820-09-26T14:11:39.286Z",
     "name": "testElection20",
     "description": "Test election number 20",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9021",
@@ -1481,7 +1481,7 @@
     "endDate": "1820-12-29T10:23:24.718Z",
     "name": "testElection21",
     "description": "Test election number 21",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9022",
@@ -1490,7 +1490,7 @@
     "endDate": "1820-08-15T13:04:00.139Z",
     "name": "testElection22",
     "description": "Test election number 22",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9023",
@@ -1873,7 +1873,7 @@
     "endDate": "1820-11-13T07:49:22.738Z",
     "name": "testElection25",
     "description": "Test election number 25",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9026",
@@ -1882,7 +1882,7 @@
     "endDate": "1820-05-04T05:36:50.409Z",
     "name": "testElection26",
     "description": "Test election number 26",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9027",
@@ -1891,7 +1891,7 @@
     "endDate": "1820-07-12T00:01:05.692Z",
     "name": "testElection27",
     "description": "Test election number 27",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9028",
@@ -1900,7 +1900,7 @@
     "endDate": "1820-10-16T04:15:40.376Z",
     "name": "testElection28",
     "description": "Test election number 28",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9029",
@@ -1909,7 +1909,7 @@
     "endDate": "1820-03-20T22:16:54.714Z",
     "name": "testElection29",
     "description": "Test election number 29",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9030",
@@ -1918,7 +1918,7 @@
     "endDate": "1820-09-21T22:32:12.509Z",
     "name": "testElection30",
     "description": "Test election number 30",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9031",
@@ -1927,7 +1927,7 @@
     "endDate": "1820-09-05T04:24:18.744Z",
     "name": "testElection31",
     "description": "Test election number 31",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9032",
@@ -1979,7 +1979,7 @@
     "endDate": "1820-12-24T13:54:53.824Z",
     "name": "testElection33",
     "description": "Test election number 33",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9034",
@@ -1988,7 +1988,7 @@
     "endDate": "1820-07-13T05:09:48.359Z",
     "name": "testElection34",
     "description": "Test election number 34",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9035",
@@ -1997,7 +1997,7 @@
     "endDate": "1820-10-18T19:38:31.962Z",
     "name": "testElection35",
     "description": "Test election number 35",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9036",
@@ -2157,7 +2157,7 @@
     "endDate": "1820-11-26T08:43:01.846Z",
     "name": "testElection37",
     "description": "Test election number 37",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9038",
@@ -2572,7 +2572,7 @@
     "endDate": "1820-12-21T20:22:29.827Z",
     "name": "testElection42",
     "description": "Test election number 42",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9043",
@@ -2837,7 +2837,7 @@
     "endDate": "1820-07-02T10:56:45.853Z",
     "name": "testElection44",
     "description": "Test election number 44",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9045",
@@ -3445,7 +3445,7 @@
     "endDate": "1820-10-29T07:38:26.452Z",
     "name": "testElection47",
     "description": "Test election number 47",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9048",
@@ -3454,7 +3454,7 @@
     "endDate": "1820-10-08T13:10:03.785Z",
     "name": "testElection48",
     "description": "Test election number 48",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9049",
@@ -3463,7 +3463,7 @@
     "endDate": "1820-11-24T05:20:30.745Z",
     "name": "testElection49",
     "description": "Test election number 49",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9050",
@@ -3472,7 +3472,7 @@
     "endDate": "1820-07-27T18:51:26.870Z",
     "name": "testElection50",
     "description": "Test election number 50",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9051",
@@ -4069,7 +4069,7 @@
     "endDate": "1820-12-06T14:19:48.818Z",
     "name": "testElection54",
     "description": "Test election number 54",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9055",
@@ -4504,7 +4504,7 @@
     "endDate": "1820-10-28T17:41:31.120Z",
     "name": "testElection58",
     "description": "Test election number 58",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9059",
@@ -4513,7 +4513,7 @@
     "endDate": "1820-09-18T00:40:50.271Z",
     "name": "testElection59",
     "description": "Test election number 59",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9060",
@@ -4872,7 +4872,7 @@
     "endDate": "1820-07-15T20:00:04.313Z",
     "name": "testElection62",
     "description": "Test election number 62",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9063",
@@ -5092,7 +5092,7 @@
     "endDate": "1820-03-07T12:51:54.662Z",
     "name": "testElection64",
     "description": "Test election number 64",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9065",
@@ -5276,7 +5276,7 @@
     "endDate": "1820-03-09T23:16:14.615Z",
     "name": "testElection66",
     "description": "Test election number 66",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9067",
@@ -5659,7 +5659,7 @@
     "endDate": "1820-12-03T01:22:51.908Z",
     "name": "testElection69",
     "description": "Test election number 69",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9070",
@@ -5668,7 +5668,7 @@
     "endDate": "1820-03-06T00:35:22.861Z",
     "name": "testElection70",
     "description": "Test election number 70",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9071",
@@ -5894,7 +5894,7 @@
     "endDate": "1820-08-03T07:37:01.135Z",
     "name": "testElection72",
     "description": "Test election number 72",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9073",
@@ -6912,7 +6912,7 @@
     "endDate": "1820-03-12T23:20:00.640Z",
     "name": "testElection77",
     "description": "Test election number 77",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9078",
@@ -7093,7 +7093,7 @@
     "endDate": "1820-06-15T10:18:23.029Z",
     "name": "testElection79",
     "description": "Test election number 79",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9080",
@@ -7102,7 +7102,7 @@
     "endDate": "1820-07-19T06:49:25.360Z",
     "name": "testElection80",
     "description": "Test election number 80",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9081",
@@ -7211,7 +7211,7 @@
     "endDate": "1820-11-16T03:26:49.940Z",
     "name": "testElection82",
     "description": "Test election number 82",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9083",
@@ -7220,7 +7220,7 @@
     "endDate": "1820-09-21T19:15:58.069Z",
     "name": "testElection83",
     "description": "Test election number 83",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9084",
@@ -7326,7 +7326,7 @@
     "endDate": "1820-11-20T00:18:27.081Z",
     "name": "testElection85",
     "description": "Test election number 85",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9086",
@@ -7420,7 +7420,7 @@
     "endDate": "1820-09-03T21:35:31.869Z",
     "name": "testElection87",
     "description": "Test election number 87",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9088",
@@ -8137,7 +8137,7 @@
     "endDate": "1820-11-11T03:36:31.436Z",
     "name": "testElection91",
     "description": "Test election number 91",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9092",
@@ -8810,7 +8810,7 @@
     "endDate": "1820-10-31T09:08:14.490Z",
     "name": "testElection96",
     "description": "Test election number 96",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9097",
@@ -8994,7 +8994,7 @@
     "endDate": "1820-08-05T23:53:33.313Z",
     "name": "testElection98",
     "description": "Test election number 98",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9099",
@@ -9097,7 +9097,7 @@
     "endDate": "1820-04-14T23:07:38.152Z",
     "name": "testElection100",
     "description": "Test election number 100",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9101",
@@ -9106,7 +9106,7 @@
     "endDate": "1820-03-20T03:22:10.203Z",
     "name": "testElection101",
     "description": "Test election number 101",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9102",
@@ -9115,7 +9115,7 @@
     "endDate": "1820-11-13T20:15:03.899Z",
     "name": "testElection102",
     "description": "Test election number 102",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9103",
@@ -9209,7 +9209,7 @@
     "endDate": "1820-10-30T09:26:58.877Z",
     "name": "testElection104",
     "description": "Test election number 104",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9105",
@@ -9625,7 +9625,7 @@
     "endDate": "1820-05-18T01:21:34.204Z",
     "name": "testElection107",
     "description": "Test election number 107",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9108",
@@ -9828,7 +9828,7 @@
     "endDate": "1820-09-07T09:30:23.467Z",
     "name": "testElection110",
     "description": "Test election number 110",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9111",
@@ -10356,7 +10356,7 @@
     "endDate": "1820-12-18T23:35:10.952Z",
     "name": "testElection114",
     "description": "Test election number 114",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9115",
@@ -10365,7 +10365,7 @@
     "endDate": "1820-06-27T00:49:31.778Z",
     "name": "testElection115",
     "description": "Test election number 115",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9116",
@@ -10374,7 +10374,7 @@
     "endDate": "1820-11-29T01:22:30.123Z",
     "name": "testElection116",
     "description": "Test election number 116",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9117",
@@ -10383,7 +10383,7 @@
     "endDate": "1820-01-19T19:49:12.793Z",
     "name": "testElection117",
     "description": "Test election number 117",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9118",
@@ -10392,7 +10392,7 @@
     "endDate": "1820-05-23T13:39:32.376Z",
     "name": "testElection118",
     "description": "Test election number 118",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9119",
@@ -10630,7 +10630,7 @@
     "endDate": "1820-11-07T01:01:29.312Z",
     "name": "testElection120",
     "description": "Test election number 120",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9121",
@@ -10639,7 +10639,7 @@
     "endDate": "1820-02-12T21:57:46.329Z",
     "name": "testElection121",
     "description": "Test election number 121",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9122",
@@ -11190,7 +11190,7 @@
     "endDate": "1820-09-30T20:01:12.614Z",
     "name": "testElection124",
     "description": "Test election number 124",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9125",
@@ -11199,7 +11199,7 @@
     "endDate": "1820-05-02T12:21:44.420Z",
     "name": "testElection125",
     "description": "Test election number 125",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9126",
@@ -11470,7 +11470,7 @@
     "endDate": "1820-12-22T16:16:58.144Z",
     "name": "testElection127",
     "description": "Test election number 127",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9128",
@@ -12341,7 +12341,7 @@
     "endDate": "1820-07-17T08:18:22.666Z",
     "name": "testElection132",
     "description": "Test election number 132",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9133",
@@ -12555,7 +12555,7 @@
     "endDate": "1820-04-24T07:28:14.143Z",
     "name": "testElection134",
     "description": "Test election number 134",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9135",
@@ -12781,7 +12781,7 @@
     "endDate": "1820-10-02T09:41:37.089Z",
     "name": "testElection136",
     "description": "Test election number 136",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9137",
@@ -12965,7 +12965,7 @@
     "endDate": "1820-10-27T12:11:22.493Z",
     "name": "testElection138",
     "description": "Test election number 138",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9139",
@@ -13062,7 +13062,7 @@
     "endDate": "1820-10-21T17:23:05.164Z",
     "name": "testElection140",
     "description": "Test election number 140",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9141",
@@ -13514,7 +13514,7 @@
     "endDate": "1820-10-08T13:02:51.036Z",
     "name": "testElection143",
     "description": "Test election number 143",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9144",
@@ -13523,7 +13523,7 @@
     "endDate": "1820-03-30T13:06:45.626Z",
     "name": "testElection144",
     "description": "Test election number 144",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9145",
@@ -13728,7 +13728,7 @@
     "endDate": "1820-11-20T18:40:06.360Z",
     "name": "testElection146",
     "description": "Test election number 146",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9147",
@@ -13737,7 +13737,7 @@
     "endDate": "1820-11-30T21:14:27.101Z",
     "name": "testElection147",
     "description": "Test election number 147",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9148",
@@ -13984,7 +13984,7 @@
     "endDate": "1820-10-09T23:45:39.597Z",
     "name": "testElection149",
     "description": "Test election number 149",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9150",
@@ -14063,7 +14063,7 @@
     "endDate": "1820-10-28T16:39:00.156Z",
     "name": "testElection151",
     "description": "Test election number 151",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9152",
@@ -14280,7 +14280,7 @@
     "endDate": "1820-05-16T19:04:22.611Z",
     "name": "testElection153",
     "description": "Test election number 153",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9154",
@@ -14289,7 +14289,7 @@
     "endDate": "1820-03-17T19:02:55.294Z",
     "name": "testElection154",
     "description": "Test election number 154",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9155",
@@ -14298,7 +14298,7 @@
     "endDate": "1820-05-27T08:23:38.087Z",
     "name": "testElection155",
     "description": "Test election number 155",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9156",
@@ -14307,7 +14307,7 @@
     "endDate": "1820-09-26T04:25:21.834Z",
     "name": "testElection156",
     "description": "Test election number 156",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9157",
@@ -14316,7 +14316,7 @@
     "endDate": "1820-05-07T23:16:07.896Z",
     "name": "testElection157",
     "description": "Test election number 157",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9158",
@@ -14325,7 +14325,7 @@
     "endDate": "1820-05-30T17:58:50.263Z",
     "name": "testElection158",
     "description": "Test election number 158",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9159",
@@ -14334,7 +14334,7 @@
     "endDate": "1820-09-14T03:34:57.864Z",
     "name": "testElection159",
     "description": "Test election number 159",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9160",
@@ -14343,7 +14343,7 @@
     "endDate": "1820-10-16T04:52:37.157Z",
     "name": "testElection160",
     "description": "Test election number 160",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9161",
@@ -14750,7 +14750,7 @@
     "endDate": "1820-09-03T23:32:15.781Z",
     "name": "testElection163",
     "description": "Test election number 163",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9164",
@@ -14931,7 +14931,7 @@
     "endDate": "1820-12-07T22:37:53.299Z",
     "name": "testElection165",
     "description": "Test election number 165",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9166",
@@ -14940,7 +14940,7 @@
     "endDate": "1820-08-15T18:54:11.720Z",
     "name": "testElection166",
     "description": "Test election number 166",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9167",
@@ -14949,7 +14949,7 @@
     "endDate": "1820-07-23T01:03:55.858Z",
     "name": "testElection167",
     "description": "Test election number 167",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9168",
@@ -14958,7 +14958,7 @@
     "endDate": "1820-05-09T19:42:14.683Z",
     "name": "testElection168",
     "description": "Test election number 168",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9169",
@@ -14967,7 +14967,7 @@
     "endDate": "1820-06-28T06:46:56.608Z",
     "name": "testElection169",
     "description": "Test election number 169",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9170",
@@ -15118,7 +15118,7 @@
     "endDate": "1820-09-23T12:55:29.381Z",
     "name": "testElection171",
     "description": "Test election number 171",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9172",
@@ -15338,7 +15338,7 @@
     "endDate": "1820-10-06T17:37:06.987Z",
     "name": "testElection173",
     "description": "Test election number 173",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9174",
@@ -15347,7 +15347,7 @@
     "endDate": "1820-12-23T04:00:30.611Z",
     "name": "testElection174",
     "description": "Test election number 174",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9175",
@@ -15356,7 +15356,7 @@
     "endDate": "1820-07-30T13:45:12.265Z",
     "name": "testElection175",
     "description": "Test election number 175",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9176",
@@ -15365,7 +15365,7 @@
     "endDate": "1820-11-27T16:04:29.736Z",
     "name": "testElection176",
     "description": "Test election number 176",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9177",
@@ -15374,7 +15374,7 @@
     "endDate": "1820-10-27T01:14:22.338Z",
     "name": "testElection177",
     "description": "Test election number 177",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9178",
@@ -15383,7 +15383,7 @@
     "endDate": "1820-05-26T12:15:57.286Z",
     "name": "testElection178",
     "description": "Test election number 178",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9179",
@@ -15514,7 +15514,7 @@
     "endDate": "1820-09-01T16:14:09.500Z",
     "name": "testElection181",
     "description": "Test election number 181",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9182",
@@ -15736,7 +15736,7 @@
     "endDate": "1820-10-16T10:59:58.831Z",
     "name": "testElection185",
     "description": "Test election number 185",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9186",
@@ -16749,7 +16749,7 @@
     "endDate": "1820-07-03T21:46:38.881Z",
     "name": "testElection191",
     "description": "Test election number 191",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9192",
@@ -17214,7 +17214,7 @@
     "endDate": "1820-05-26T03:52:40.193Z",
     "name": "testElection195",
     "description": "Test election number 195",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9196",
@@ -17223,7 +17223,7 @@
     "endDate": "1820-04-14T10:28:13.811Z",
     "name": "testElection196",
     "description": "Test election number 196",
-    "EIN": []
+    "EIN": null
   },
   {
     "id": "9197",
@@ -17784,6 +17784,6 @@
     "endDate": "1820-11-19T10:06:38.202Z",
     "name": "testElection200",
     "description": "Test election number 200",
-    "EIN": []
+    "EIN": null
   }
 ]

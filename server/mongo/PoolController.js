@@ -4,6 +4,17 @@ import MongoDB from 'mongodb'
 import Debug from 'debug'
 const debug = Debug('mongo:PoolController')
 
+// CAUTION Drop entire pool collection
+export function clearPoolList () {
+  return new Promise((resolve, reject) => {
+    runQuery((db) => {
+      db.collection('pools').drop()
+        .then((data) => { debug('cleared pool list'); return resolve(data) })
+        .catch((err) => { debug('Error clearing pool list', err); return reject(err) })
+    })
+  })
+}
+
 // Retrieve the list of voter pools
 export function getPoolList () {
   return new Promise((resolve, reject) => {
@@ -55,12 +66,30 @@ export function getPool (id) {
 }
 
 // Update pool list file
-export async function addToPoolList (newPool) {
+export async function addToPoolList (newPools) {
+  // Make sure it's always an array
+  if (!Array.isArray(newPools)) {
+    newPools = [newPools]
+  }
+
+  // Sanitize documents before inserting
+  const pools = newPools.map((newPool) => ({
+    name: newPool.name,
+    description: newPool.description,
+    members: newPool.members?.map((memberID) => (new MongoDB.ObjectID(memberID)))
+  }))
+
   return new Promise((resolve, reject) => {
-    runQuery((db) => {
-      db.collection('pools').insertOne(newPool)
-        .then((data) => { debug('Inserted a voter pool'); return resolve() })
-        .catch((err) => { debug('Error inserting voter pool', err); return reject(err) })
+    runQuery(async (db) => {
+      try {
+        // Insert the voter
+        const result = await db.collection('pools').insertMany(pools)
+        debug(`Inserted ${result.insertedIds.length} pool(s)`)
+        return resolve(result.insertedIds)
+      } catch (err) {
+        debug('Error inserting pool(s)', err)
+        return reject(err)
+      }
     })
   })
 }
