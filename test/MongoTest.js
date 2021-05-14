@@ -37,7 +37,7 @@ testElectionData = testElectionData.map((rawElection) => (new Election(rawElecti
 // Test the MongoDB controllers (skipped for CI)
 describe('Test MongoDB Controller', function () {
   // Skip this test when running in github CI
-  if (process.env.GITHUB_ACTIONS) { this.skip() }
+  if (process.env.GITHUB_ACTIONS) { return }
 
   // Build/rebuild the voters collection
   describe('Rebuild Voters Collection', function () {
