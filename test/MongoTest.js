@@ -34,8 +34,11 @@ const rawElectionData = fs.readFileSync(path.resolve('./test/data/testElections.
 let testElectionData = JSON.parse(rawElectionData)
 testElectionData = testElectionData.map((rawElection) => (new Election(rawElection)))
 
-// Test the Election class
+// Test the MongoDB controllers (skipped for CI)
 describe('Test MongoDB Controller', () => {
+  // Skip this test when running in github CI
+  if (process.env.GITHUB_ACTIONS) { this.skip() }
+
   // Build/rebuild the voters collection
   describe('Rebuild Voters Collection', function () {
     // Increase timeout to 30 seconds
