@@ -35,7 +35,7 @@ let testElectionData = JSON.parse(rawElectionData)
 testElectionData = testElectionData.map((rawElection) => (new Election(rawElection)))
 
 // Test the MongoDB controllers (skipped for CI)
-describe('Test MongoDB Controller', () => {
+describe('Test MongoDB Controller', function () {
   // Skip this test when running in github CI
   if (process.env.GITHUB_ACTIONS) { this.skip() }
 
