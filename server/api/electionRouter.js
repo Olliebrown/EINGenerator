@@ -52,6 +52,20 @@ router.get('/:id', async (req, res) => {
   }
 })
 
+// Retrieve details for indicated election with voter details
+router.get('/:id/withVoters', async (req, res) => {
+  const electionID = req.params.id
+
+  try {
+    const match = await MONGO_ELECTION_CTRL.getElection(electionID)
+    return res.json(match)
+  } catch (err) {
+    return res.status(404).json({
+      error: true, message: `Election not found with ID ${electionID}`, err
+    })
+  }
+})
+
 // Trigger EIN generation for indicated election
 router.post('/:id/generateEIN', async (req, res) => {
   // Attempt to retrieve election object

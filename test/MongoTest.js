@@ -8,6 +8,7 @@ import Pool from '../shared/Pool.js'
 import Election from '../shared/Election.js'
 
 // Bring in mongo controllers
+import MongoDB from 'mongodb'
 import * as MONGO_VOTER_CTRL from '../server/mongo/VoterController.js'
 import * as MONGO_POOL_CTRL from '../server/mongo/PoolController.js'
 import * as MONGO_ELECTION_CTRL from '../server/mongo/ElectionController.js'
@@ -33,6 +34,38 @@ const poolIDMap = {}
 const rawElectionData = fs.readFileSync(path.resolve('./test/data/testElections.json'), { encoding: 'utf-8' })
 let testElectionData = JSON.parse(rawElectionData)
 testElectionData = testElectionData.map((rawElection) => (new Election(rawElection)))
+const electionIDMap = {}
+
+// Generic function for comparing DB data to source data
+async function validateData (start, end, sourceData, idMap, lookupFunc, shape) {
+  // Make needed data lists
+  const slicedData = sourceData.slice(start, end)
+  const IDList = slicedData.map((current) => (idMap[current.id.toString()]))
+
+  // Get voters
+  const lookupPromise = lookupFunc(IDList)
+  expect(lookupPromise).to.be.fulfilled
+  const result = await lookupPromise
+
+  // Construct comparison object
+  const compareList = slicedData.map((current) => {
+    const newData = {}
+    Object.keys(shape).forEach((key) => {
+      newData[key] = current[key]
+    })
+    newData._id = idMap[current.id.toString()]
+    return newData
+  })
+
+  // Compare
+  if (!Array.isArray(result)) {
+    expect(result).to.deep.include(compareList[0])
+  } else {
+    result.forEach((current, i) => {
+      expect(current).to.deep.include(compareList[i])
+    })
+  }
+}
 
 // Test the MongoDB controllers (skipped for CI)
 describe('Test MongoDB Controller', function () {
@@ -64,6 +97,23 @@ describe('Test MongoDB Controller', function () {
           voterIDMap[testVoterData[start + i].id.toString()] = newID
         })
       })
+    }
+
+    // Validate the inserted data
+    let step = 0
+    let item = 0
+    while (item < testVoterData.length) {
+      const stride = Math.pow(10, step)
+      it(`Validates inserted data against original data (${item}/${stride})`,
+        validateData.bind(
+          this, item, Math.min(item + stride, testVoterData.length), testVoterData,
+          poolIDMap, MONGO_VOTER_CTRL.getVoter.bind(MONGO_VOTER_CTRL),
+          { firstName: 1, lastName: 1, email: 1 }
+        )
+      )
+
+      item += stride
+      if (item >= Math.pow(10, step + 1)) { step++ }
     }
   })
 
@@ -103,6 +153,23 @@ describe('Test MongoDB Controller', function () {
         })
       })
     }
+
+    // Validate the inserted data
+    let step = 0
+    let item = 0
+    while (item < testPoolData.length) {
+      const stride = Math.pow(10, step)
+      it(`Validates inserted data against original data (${item}/${stride})`,
+        validateData.bind(
+          this, item, Math.min(item + stride, testPoolData.length), testPoolData,
+          poolIDMap, MONGO_POOL_CTRL.getPool.bind(MONGO_POOL_CTRL),
+          { name: 1, description: 1, members: 1 }
+        )
+      )
+
+      item += stride
+      if (item >= Math.pow(10, step + 1)) { step++ }
+    }
   })
 
   // Build/rebuild the election collection
@@ -125,7 +192,7 @@ describe('Test MongoDB Controller', function () {
     })
 
     // Clear old collection
-    it('Drops the pool collection', function () {
+    it('Drops the election collection', function () {
       const dropPromise = MONGO_ELECTION_CTRL.clearElectionList()
       expect(dropPromise).to.be.fulfilled
       return dropPromise
@@ -139,8 +206,36 @@ describe('Test MongoDB Controller', function () {
         const end = Math.min(start + 100, testElectionData.length)
         const newPromise = MONGO_ELECTION_CTRL.addToElectionList(testElectionData.slice(start, end))
         expect(newPromise).to.be.fulfilled
-        await newPromise
+
+        const newIDs = await newPromise
+        Object.values(newIDs).forEach((newID, i) => {
+          electionIDMap[testElectionData[start + i].id.toString()] = newID
+          testElectionData[start + i].poolID = new MongoDB.ObjectID(testElectionData[start + i].poolID)
+        })
       })
     }
-  })  
+
+    // Validate the inserted data
+    let step = 0
+    let item = 0
+    while (item < testElectionData.length) {
+      const stride = Math.pow(10, step)
+      it(`Validates inserted data against original data (${item}/${stride})`,
+        validateData.bind(
+          this, item, Math.min(item + stride, testElectionData.length), testElectionData,
+          electionIDMap, MONGO_ELECTION_CTRL.getElection.bind(MONGO_ELECTION_CTRL),
+          { name: 1, description: 1, startDate: 1, endDate: 1, poolID: 1, EIN: 1 }
+        )
+      )
+
+      item += stride
+      if (item >= Math.pow(10, step + 1)) { step++ }
+    }
+  })
+
+  // Close mongo client after all tests are finished
+  after(function(done) {
+    MONGO_ELECTION_CTRL.closeClient()
+      .then(done).catch(done)
+  });
 })

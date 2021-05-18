@@ -28,11 +28,20 @@ class Pool {
 
   static parse (JSONString) {
     try {
-      const newPool = JSON.parse(JSONString)
-      if (!Array.isArray(newPool.members) || !newPool.members.every(e => typeof e === 'string')) {
-        newPool.members = []
+      let newPools = JSON.parse(JSONString)
+      if (!Array.isArray(newPools)) {
+        newPools = [newPools]
       }
-      return new Pool(newPool)
+
+      const parsedPools = newPools.map((newPool) => {
+        if (!Array.isArray(newPool.members) || !newPool.members.every(e => typeof e === 'string')) {
+          newPool.members = []
+        }
+        return new Pool(newPool)
+      })
+
+      if (parsedPools.length === 1) { return parsedPools[0] }
+      return parsedPools
     } catch (err) {
       debug('Failed to parse Pool info: ' + err)
       throw err

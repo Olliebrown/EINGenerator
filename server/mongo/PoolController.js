@@ -1,8 +1,11 @@
-import { runQuery } from './dbAccess.js'
+import { runQuery, closeClient } from './dbAccess.js'
 import MongoDB from 'mongodb'
 
 import Debug from 'debug'
 const debug = Debug('mongo:PoolController')
+
+// Re-export closeClient
+export { closeClient }
 
 // CAUTION Drop entire pool collection
 export function clearPoolList () {
@@ -45,20 +48,28 @@ export function getPoolListSummary () {
 }
 
 // Find a specific voter pool
-export function getPool (id) {
+export function getPool (poolIDs) {
+  if (!Array.isArray(poolIDs)) {
+    poolIDs = [poolIDs]
+  }
+
   return new Promise((resolve, reject) => {
     // Run the query itself
     runQuery(async (db) => {
       try {
-        const result = await db.collection('pools').findOne({ _id: new MongoDB.ObjectID(id) })
+        const result = await db.collection('pools').find({ _id: { $in: poolIDs } }).toArray()
         if (result === null) {
-          debug('Voter pool not found')
-          return reject(new Error('No voter pool with given id'))
+          debug('Voter pool(s) not found')
+          return reject(new Error('No voter pool(s) with given id(s)'))
         }
-        debug('Retrieved voter pool')
+
+        debug('Retrieved voter pool(s)')
+        if (result.length === 1) {
+          return resolve(result[0])
+        }
         return resolve(result)
       } catch (err) {
-        debug('Error retrieving voter pool', err)
+        debug('Error retrieving voter pool(s)', err)
         return reject(err)
       }
     })
@@ -84,7 +95,7 @@ export async function addToPoolList (newPools) {
       try {
         // Insert the voter
         const result = await db.collection('pools').insertMany(pools)
-        debug(`Inserted ${result.insertedIds.length} pool(s)`)
+        debug(`Inserted ${Object.values(result.insertedIds).length} pool(s)`)
         return resolve(result.insertedIds)
       } catch (err) {
         debug('Error inserting pool(s)', err)

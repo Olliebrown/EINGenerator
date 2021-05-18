@@ -1,8 +1,11 @@
-import { runQuery } from './dbAccess.js'
+import { runQuery, closeClient } from './dbAccess.js'
 import MongoDB from 'mongodb'
 
 import Debug from 'debug'
 const debug = Debug('mongo:VoterController')
+
+// Re-export closeClient
+export { closeClient }
 
 // CAUTION Drop entire voter collection
 export function clearVoterList () {
@@ -31,18 +34,26 @@ export function getSummaryVoterList () {
   return getVoterList()
 }
 
-// Find a specific voter
-export function getVoter (id) {
+// Find specific voter(s)
+export function getVoter (voterIDs) {
+  if (!Array.isArray(voterIDs)) {
+    voterIDs = [voterIDs]
+  }
+
   return new Promise((resolve, reject) => {
     // Run the query itself
     runQuery(async (db) => {
       try {
-        const result = await db.collection('voters').findOne({ _id: new MongoDB.ObjectID(id) })
+        const result = await db.collection('voters').find({ _id: { $in: voterIDs } }).toArray()
         if (result === null) {
-          debug('Voter not found')
-          return reject(new Error('No voter with given id'))
+          debug('Voter(s) not found')
+          return reject(new Error('No voter(s) with given id(s)'))
         }
-        debug('Retrieved voter')
+
+        debug('Retrieved voter(s)')
+        if (result.length === 1) {
+          return resolve(result[0])
+        }
         return resolve(result)
       } catch (err) {
         debug('Error retrieving voter', err)
@@ -72,7 +83,7 @@ export async function addToVoterList (newVoters) {
       try {
         // Insert the voter
         const result = await db.collection('voters').insertMany(voters)
-        debug(`Inserted ${result.insertedIds.length} voter(s)`)
+        debug(`Inserted ${Object.values(result.insertedIds).length} voter(s)`)
         return resolve(result.insertedIds)
       } catch (err) {
         debug('Error inserting voter(s)', err)

@@ -1,8 +1,11 @@
-import { runQuery } from './dbAccess.js'
+import { runQuery, closeClient } from './dbAccess.js'
 import MongoDB from 'mongodb'
 
 import Debug from 'debug'
 const debug = Debug('mongo:ElectionController')
+
+// Re-export closeClient
+export { closeClient }
 
 // CAUTION Drop entire election collection
 export function clearElectionList () {
@@ -45,17 +48,25 @@ export function getElectionListSummary () {
 }
 
 // Find a specific election
-export function getElection (id) {
+export function getElection (electionIDs) {
+  if (!Array.isArray(electionIDs)) {
+    electionIDs = [electionIDs]
+  }
+
   return new Promise((resolve, reject) => {
     // Run the query itself
     runQuery(async (db) => {
       try {
-        const result = await db.collection('elections').findOne({ _id: new MongoDB.ObjectID(id) })
+        const result = await db.collection('elections').find({ _id: { $in: electionIDs } }).toArray()
         if (result === null) {
-          debug('Election not found')
-          return reject(new Error('No election with given id'))
+          debug('Elections(s) not found')
+          return reject(new Error('No election(s) with given id(s)'))
         }
-        debug('Retrieved election')
+
+        debug('Retrieved election(s)')
+        if (result.length === 1) {
+          return resolve(result[0])
+        }
         return resolve(result)
       } catch (err) {
         debug('Error retrieving election', err)
@@ -103,7 +114,7 @@ export async function addToElectionList (newElections) {
 
         // Insert the elections
         const result2 = await db.collection('elections').insertMany(elections)
-        debug(`Inserted ${result2.insertedIds.length} election(s)`)
+        debug(`Inserted ${Object.values(result2.insertedIds).length} election(s)`)
         return resolve(result2.insertedIds)
       } catch (err) {
         debug('Error inserting election(s)', err)

@@ -40,3 +40,17 @@ export async function runQuery (queryCB) {
     throw (new Error('Failed to run query'))
   }
 }
+
+export async function closeClient () {
+  // Establish a connection (if not already)
+  try {
+    if (client.isConnected()) {
+      debug('Disconnecting from mongo ...')
+      await client.close()
+      debug('... success')
+    }
+  } catch (err) {
+    debug('Error disconnecting from mongo', err)
+    throw (new Error('Failed to disconnect from mongodb'))
+  }
+}

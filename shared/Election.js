@@ -69,8 +69,13 @@ class Election {
 
   static parse (JSONString) {
     try {
-      const newElection = JSON.parse(JSONString)
-      return new Election(newElection)
+      let newElections = JSON.parse(JSONString)
+      if (!Array.isArray(newElections)) {
+        newElections = [newElections]
+      }
+      const parsedElections = newElections.map((newElection) => (new Election(newElection)))
+      if (parsedElections.length === 1) { return parsedElections[0] }
+      return parsedElections
     } catch (err) {
       debug('Failed to parse Election info: ' + err)
     }
