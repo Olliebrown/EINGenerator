@@ -36,8 +36,13 @@ class Voter {
 
   static parse (JSONString) {
     try {
-      const newVoter = JSON.parse(JSONString)
-      return new Voter(newVoter)
+      let newVoters = JSON.parse(JSONString)
+      if (!Array.isArray(newVoters)) {
+        newVoters = [newVoters]
+      }
+      const parsedVoters = newVoters.map((newVoter) => (new Voter(newVoter)))
+      if (parsedVoters.length === 1) { return parsedVoters[0] }
+      return parsedVoters
     } catch (err) {
       debug('Failed to parse Voter info: ' + err)
     }

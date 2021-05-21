@@ -1,7 +1,9 @@
 import Express from 'express'
 import Debug from 'debug'
 
-import * as MONGO_CTRL from '../mongo/ElectionController.js'
+import Election from '../../shared/Election.js'
+import * as MONGO_POOL_CTRL from '../mongo/PoolController.js'
+import * as MONGO_ELECTION_CTRL from '../mongo/ElectionController.js'
 
 const debug = Debug('server:electionRouter')
 const router = new Express.Router()
@@ -15,7 +17,7 @@ router.put('/create', Express.raw({ type: '*/*' }), async (req, res) => {
   }
 
   try {
-    const newID = await MONGO_CTRL.addToElectionList(JSON.parse(req.body))
+    const newID = await MONGO_ELECTION_CTRL.addToElectionList(JSON.parse(req.body))
     return res.json({ success: true, message: 'New election added to list', id: newID })
   } catch (err) {
     debug('Failed to insert election')
@@ -28,7 +30,7 @@ router.put('/create', Express.raw({ type: '*/*' }), async (req, res) => {
 // Retrieve summary list of elections
 router.get('/', async (req, res) => {
   try {
-    res.json(await MONGO_CTRL.getElectionListSummary())
+    res.json(await MONGO_ELECTION_CTRL.getElectionListSummary())
   } catch (err) {
     res.status(400).json({
       error: true, message: `Failed to get summary: ${err.message}`
@@ -36,16 +38,73 @@ router.get('/', async (req, res) => {
   }
 })
 
-// Retrieve details for indicated pool
+// Retrieve details for indicated election
 router.get('/:id', async (req, res) => {
   const electionID = req.params.id
 
   try {
-    const match = await MONGO_CTRL.getElection(electionID)
+    const match = await MONGO_ELECTION_CTRL.getElection(electionID)
     return res.json(match)
   } catch (err) {
     return res.status(404).json({
       error: true, message: `Election not found with ID ${electionID}`, err
+    })
+  }
+})
+
+// Retrieve details for indicated election with voter details
+router.get('/:id/withVoters', async (req, res) => {
+  const electionID = req.params.id
+
+  try {
+    const match = await MONGO_ELECTION_CTRL.getElection(electionID)
+    return res.json(match)
+  } catch (err) {
+    return res.status(404).json({
+      error: true, message: `Election not found with ID ${electionID}`, err
+    })
+  }
+})
+
+// Trigger EIN generation for indicated election
+router.post('/:id/generateEIN', async (req, res) => {
+  // Attempt to retrieve election object
+  const electionID = req.params.id
+  let election = null
+  try {
+    const match = await MONGO_ELECTION_CTRL.getElection(electionID)
+    election = new Election(match)
+  } catch (err) {
+    return res.status(404).json({
+      error: true, message: `Election not found with ID ${electionID}`, err
+    })
+  }
+
+  // Does this election already have EINs
+  if (election.EIN !== null) {
+    return res.status(400).json({
+      error: true, message: 'Election already has EINs'
+    })
+  }
+
+  // Attempt to retrieve associated voter pool
+  let pool = null
+  try {
+    pool = await MONGO_POOL_CTRL.getPool(election.poolID)
+  } catch (err) {
+    return res.status(404).json({
+      error: true, message: `No pool found for ID ${election.poolID}`, err
+    })
+  }
+
+  // Attempt to generate the EIN list
+  try {
+    election.makeNewEINList(pool.members, 9)
+    await MONGO_ELECTION_CTRL.updateElection(electionID, election)
+    return res.json({ success: true, message: 'EIN List generated', EIN: election.EIN })
+  } catch (err) {
+    return res.status(500).json({
+      error: true, message: 'Failed to generate and store EINs', err
     })
   }
 })

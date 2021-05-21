@@ -23,3 +23,11 @@ export function newItem (type, itemData) {
       .catch((error) => { reject(error) })
   })
 }
+
+export function updateItem (type, itemID, itemData) {
+  return new Promise((resolve, reject) => {
+    Axios.post(`${type}/${itemID}/update`, itemData)
+      .then((result) => { resolve(result.status) })
+      .catch((error) => { reject(error) })
+  })
+}
