@@ -42,6 +42,8 @@ export default function ItemViewDetails (props) {
     try {
       console.log(`Retrieve details ${type} ${itemID}`)
       const newDetails = await DATA.getItem(type, itemID)
+      console.log('Item details:')
+      console.log(newDetails)
       setItemDetails(newDetails)
     } catch (err) {
       console.error(`Failed to retrieve "${type}" type details for ${itemID}`)
@@ -62,6 +64,7 @@ export default function ItemViewDetails (props) {
   }
 
   // Show full details once available
+  console.log(itemDetails)
   return (
     <AccordionDetails>
       <Grid container spacing={1}>

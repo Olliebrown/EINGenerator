@@ -49,16 +49,18 @@ export function getPoolListSummary () {
 
 // Find a specific voter pool
 export function getPool (poolIDs) {
+  // Ensure IDs are an array and are the proper type
   if (!Array.isArray(poolIDs)) {
     poolIDs = [poolIDs]
   }
+  poolIDs = poolIDs.map((id) => (typeof id === 'string' ? new MongoDB.ObjectID(id) : id))
 
   return new Promise((resolve, reject) => {
     // Run the query itself
     runQuery(async (db) => {
       try {
         const result = await db.collection('pools').find({ _id: { $in: poolIDs } }).toArray()
-        if (result === null) {
+        if (result === null || (Array.isArray(result) && result.length < 1)) {
           debug('Voter pool(s) not found')
           return reject(new Error('No voter pool(s) with given id(s)'))
         }

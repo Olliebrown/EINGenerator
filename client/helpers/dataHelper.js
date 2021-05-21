@@ -11,6 +11,14 @@ export function getList (type) {
 export function getItem (type, itemID) {
   return new Promise((resolve, reject) => {
     Axios.get(`${type}/${itemID}`)
+      .then((result) => { console.log('response:', result); resolve(result.data) })
+      .catch((error) => { reject(error) })
+  })
+}
+
+export function getItems (type, itemIDs) {
+  return new Promise((resolve, reject) => {
+    Axios.post(`${type}/`, itemIDs, { headers: { 'Content-Type': 'application/json' } })
       .then((result) => { resolve(result.data) })
       .catch((error) => { reject(error) })
   })

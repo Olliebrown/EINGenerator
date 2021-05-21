@@ -53,4 +53,17 @@ router.get('/:id', async (req, res) => {
   }
 })
 
+// Retrieve details for a list of voter pools (full details)
+router.post('/', Express.json({ type: '*/*' }), async (req, res) => {
+  const poolIDs = req.body
+  try {
+    const match = await MONGO_CTRL.getPool(poolIDs)
+    return res.json(match)
+  } catch (err) {
+    return res.status(404).json({
+      error: true, message: 'Pool(s) not found for ID list', poolIDs, err
+    })
+  }
+})
+
 export default router

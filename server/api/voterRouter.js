@@ -53,4 +53,18 @@ router.get('/:id', async (req, res) => {
   }
 })
 
+// Retrieve details for a list of voters (full details)
+router.post('/', Express.json({ type: '*/*' }), async (req, res) => {
+  const voterIDs = req.body
+
+  try {
+    const match = await MONGO_CTRL.getVoter(voterIDs)
+    return res.json(match)
+  } catch (err) {
+    return res.status(404).json({
+      error: true, message: 'Voter(s) not found for ID list', voterIDs, err
+    })
+  }
+})
+
 export default router

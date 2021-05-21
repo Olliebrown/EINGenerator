@@ -1,6 +1,7 @@
 import Express from 'express'
 import Debug from 'debug'
 
+import VoterRouter from './api/voterRouter.js'
 import PoolRouter from './api/poolRouter.js'
 import ElectionRouter from './api/electionRouter.js'
 
@@ -14,6 +15,7 @@ app.use((req, res, next) => {
 })
 
 // Backend data API
+app.use('/voter', VoterRouter)
 app.use('/pool', PoolRouter)
 app.use('/election', ElectionRouter)
 

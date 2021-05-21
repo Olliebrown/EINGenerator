@@ -36,16 +36,18 @@ export function getSummaryVoterList () {
 
 // Find specific voter(s)
 export function getVoter (voterIDs) {
+  // Ensure ids are an array and are of the proper type
   if (!Array.isArray(voterIDs)) {
     voterIDs = [voterIDs]
   }
+  voterIDs = voterIDs.map((id) => (typeof id === 'string' ? new MongoDB.ObjectID(id) : id))
 
   return new Promise((resolve, reject) => {
     // Run the query itself
     runQuery(async (db) => {
       try {
         const result = await db.collection('voters').find({ _id: { $in: voterIDs } }).toArray()
-        if (result === null) {
+        if (result === null || (Array.isArray(result) && result.length < 1)) {
           debug('Voter(s) not found')
           return reject(new Error('No voter(s) with given id(s)'))
         }

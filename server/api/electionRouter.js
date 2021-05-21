@@ -52,16 +52,15 @@ router.get('/:id', async (req, res) => {
   }
 })
 
-// Retrieve details for indicated election with voter details
-router.get('/:id/withVoters', async (req, res) => {
-  const electionID = req.params.id
-
+// Retrieve details for a list of elections (full details)
+router.post('/', Express.json({ type: '*/*' }), async (req, res) => {
+  const electionIDs = req.body
   try {
-    const match = await MONGO_ELECTION_CTRL.getElection(electionID)
+    const match = await MONGO_ELECTION_CTRL.getElection(electionIDs)
     return res.json(match)
   } catch (err) {
     return res.status(404).json({
-      error: true, message: `Election not found with ID ${electionID}`, err
+      error: true, message: 'Election(s) not found for ID list', electionIDs, err
     })
   }
 })

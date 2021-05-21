@@ -49,16 +49,18 @@ export function getElectionListSummary () {
 
 // Find a specific election
 export function getElection (electionIDs) {
+  // Ensure IDs are an array and of the proper type
   if (!Array.isArray(electionIDs)) {
     electionIDs = [electionIDs]
   }
+  electionIDs = electionIDs.map((id) => (typeof id === 'string' ? new MongoDB.ObjectID(id) : id))
 
   return new Promise((resolve, reject) => {
     // Run the query itself
     runQuery(async (db) => {
       try {
         const result = await db.collection('elections').find({ _id: { $in: electionIDs } }).toArray()
-        if (result === null) {
+        if (result === null || (Array.isArray(result) && result.length < 1)) {
           debug('Elections(s) not found')
           return reject(new Error('No election(s) with given id(s)'))
         }

@@ -13,7 +13,6 @@ import Avatar from '@material-ui/core/Avatar'
 import ImageIcon from '@material-ui/icons/Person'
 
 import * as DATA from '../helpers/dataHelper.js'
-import debug from 'debug'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,6 +26,8 @@ export default function PersonList (props) {
   // Destructure props and create class names
   const { people } = props
   const classes = useStyles()
+
+  console.log('Person List:', people)
 
   // Deal with empty list
   if (people.length < 1) {
@@ -43,12 +44,14 @@ export default function PersonList (props) {
   const [peopleData, updatePeopleData] = useState([])
   useEffect(async () => {
     if (people.length > 1) {
+      console.log(`Retrieve details voters ${people}`)
       try {
-        const newData = await DATA.getItem('voters', people)
+        const newData = await DATA.getItems('voter', people)
         updatePeopleData(newData)
       } catch (err) {
         console.error('Failed to retrieve voters')
         console.error(err)
+        alert('WARNING: Failed to retrieve voter details (see console)')
       }
     }
   }, [people])
@@ -80,13 +83,7 @@ export default function PersonList (props) {
 }
 
 PersonList.propTypes = {
-  people: PropTypes.arrayOf(
-    PropTypes.shape({
-      firstName: PropTypes.string,
-      lastName: PropTypes.string,
-      email: PropTypes.string
-    })
-  )
+  people: PropTypes.arrayOf(PropTypes.string)
 }
 
 PersonList.defaultProps = {
