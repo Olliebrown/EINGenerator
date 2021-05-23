@@ -13,7 +13,7 @@ const SlideTransition = React.forwardRef(function SlideTransition (props, ref) {
 
 function FormDialog (props) {
   // Destructure props
-  const { open, onToggle, onFormSubmit, children, title, addLabel } = props
+  const { open, onToggle, onFormSubmit, children, title, addLabel, ...rest } = props
 
   const handleCancel = () => {
     onToggle(false)
@@ -35,7 +35,7 @@ function FormDialog (props) {
 
   return (
     <div>
-      <Dialog open={open} onClose={handleCancel} aria-labelledby="poolForm-dialog-title" TransitionComponent={SlideTransition}>
+      <Dialog open={open} onClose={handleCancel} aria-labelledby="poolForm-dialog-title" TransitionComponent={SlideTransition} {...rest}>
         <DialogTitle id="poolForm-dialog-title">
           {title}
         </DialogTitle>

@@ -1,32 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-import moment from 'moment'
-
-import { makeStyles } from '@material-ui/core/styles'
 import AccordionDetails from '@material-ui/core/AccordionDetails'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import Skeleton from '@material-ui/lab/Skeleton'
 
-import * as DATA from '../helpers/dataHelper.js'
+import ElectionDetails from './ElectionDetails.jsx'
 import PersonList from './PersonList.jsx'
 
-// String for formatting dates with moment.js
-const FMT_STRING = ' MMMM Do YYYY, h:mm:ss a '
-
-const useStyles = makeStyles((theme) => ({
-  dateStyle: {
-    fontWeight: 'bold'
-  }
-}))
+import * as DATA from '../helpers/dataHelper.js'
 
 export default function ItemViewDetails (props) {
   // Destructure props
   const { type, itemID } = props
-
-  // Generate unique class names
-  const classes = useStyles()
 
   // Track item id of expanded panel and expanded state
   const [itemDetails, setItemDetails] = useState(null)
@@ -40,10 +27,7 @@ export default function ItemViewDetails (props) {
 
     // Try to retrieve data
     try {
-      console.log(`Retrieve details ${type} ${itemID}`)
       const newDetails = await DATA.getItem(type, itemID)
-      console.log('Item details:')
-      console.log(newDetails)
       setItemDetails(newDetails)
     } catch (err) {
       console.error(`Failed to retrieve "${type}" type details for ${itemID}`)
@@ -64,7 +48,6 @@ export default function ItemViewDetails (props) {
   }
 
   // Show full details once available
-  console.log(itemDetails)
   return (
     <AccordionDetails>
       <Grid container spacing={1}>
@@ -73,23 +56,14 @@ export default function ItemViewDetails (props) {
             {itemDetails.description}
           </Typography>
         </Grid>
-        <Grid item sm={12}>
-          {(type === 'pool' &&
+        {(type === 'pool' &&
+          <Grid item sm={12}>
             <PersonList people={itemDetails.members} />
-          )}
-          {(type === 'election' &&
-            <Typography>
-              {'Runs from'}
-              <span className={classes.dateStyle}>
-                {moment(itemDetails.startDate).format(FMT_STRING)}
-              </span>
-              {'to'}
-              <span className={classes.dateStyle}>
-                {moment(itemDetails.endDate).format(FMT_STRING)}
-              </span>
-            </Typography>
-          )}
-        </Grid>
+          </Grid>
+        )}
+        {(type === 'election' &&
+          <ElectionDetails election={itemDetails} />
+        )}
       </Grid>
     </AccordionDetails>
   )

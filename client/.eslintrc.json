@@ -30,6 +30,8 @@
         "react/jsx-newline": "off",
         "react/jsx-max-depth": "off",
         "react/forbid-component-props": ["warn", { "forbid": ["style"] }],
+        "react/forbid-prop-types": ["warn", { "forbid": ["any"] }],
+        "react/jsx-one-expression-per-line": ["warn", { "allow": "single-child" }],
         "react/sort-prop-types": "off",
         "react/jsx-curly-brace-presence": "off",
         "react/jsx-sort-default-props": "off",
