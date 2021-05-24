@@ -18,10 +18,29 @@ import Debug from 'debug'
 // Initialize DotENV and sendin blue auth object
 import DotENV from 'dotenv'
 DotENV.config()
-const SIB_AUTH_CONFIG = {
-  user: (process.env.SIB_SMTP_USER || 'unknown'),
-  pass: (process.env.SIB_SMTP_PW || 'bad-pass')
+
+// Sendin blue config
+const SMTP_SIB_CONFIG = {
+  service: 'SendinBlue',
+  auth: {
+    user: (process.env.SIB_SMTP_USER || 'unknown'),
+    pass: (process.env.SIB_SMTP_PW || 'bad-pass')
+  }
 }
+
+// Testing config (ethereal.email)
+const SMTP_TEST_CONFIG = {
+  host: 'smtp.ethereal.email',
+  port: 465,
+  secure: true,
+  auth: {
+    user: (process.env.TEST_SMTP_USER || 'unknown'),
+    pass: (process.env.TEST_SMTP_PW || 'bad-pass')
+  }
+}
+
+// Always default to testing!
+const SMTP_TEST_ONLY = (process.env.SMTP_TEST_ONLY || true)
 
 // Create debug interface
 const debug = Debug('server:emailHelper')
@@ -72,10 +91,9 @@ export async function sendEmails (emailJob) {
   emailJob.expected = voters.length
 
   // Create the nodemailer transport object
-  const transporter = nodemailer.createTransport({
-    service: 'SendinBlue',
-    auth: SIB_AUTH_CONFIG
-  })
+  const transporter = nodemailer.createTransport(
+    (SMTP_TEST_ONLY ? SMTP_TEST_CONFIG : SMTP_SIB_CONFIG)
+  )
 
   // Start sending emails
   for (let i = 0; i < voters.length; i++) {

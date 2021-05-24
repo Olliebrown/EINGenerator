@@ -127,14 +127,16 @@ export async function addToElectionList (newElections) {
 }
 
 // Update a specific election
-export function updateElection (id, updatedElection) {
+export function updateElection (id, updatedFields) {
+  debug('Update Election started')
+
   return new Promise((resolve, reject) => {
     // Run the query itself
     runQuery(async (db) => {
       try {
         const result = await db.collection('elections').updateOne(
           { _id: new MongoDB.ObjectID(id) },
-          updatedElection
+          { $set: updatedFields }
         )
         if (result.modifiedCount !== 1) {
           debug('Election update failed')

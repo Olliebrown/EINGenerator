@@ -13,10 +13,10 @@ import Icon from '@material-ui/core/Icon'
 import ConfirmationDialog from './ConfirmationDialog.jsx'
 import EmailForm from './EmailForm.jsx'
 
-// import * as DATA from '../helpers/dataHelper.js'
+import * as DATA from '../helpers/dataHelper.js'
 
 // String for formatting dates with moment.js
-const FMT_STRING = ' MMMM Do YYYY, h:mm:ss a '
+const FMT_STRING = ' MMMM Do YYYY, h:mm a '
 
 const oldConfirmState = {
   handleClose: null,
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 function SendIcon () { return (<Icon>{'send'}</Icon>) }
 function EINIcon () { return (<Icon>{'tag'}</Icon>) }
 
-export default function PersonList (props) {
+export default function ElectionDetails (props) {
   // Destructure props and create class names
   const { election } = props
   const classes = useStyles()
@@ -47,13 +47,24 @@ export default function PersonList (props) {
   const [confirmState, setConfirmState] = useState(oldConfirmState)
 
   // Are the EINs defined for this election
-  const EINDefined = (election.EIN !== null && Object.keys(election.EIN).length > 0)
+  const EINDefined = (election.EIN && Object.keys(election.EIN).length > 0)
 
+  // Callback for generating EINs
   const generateEINs = () => {
     setConfirmState({
       handleClose: (accepted) => {
-        setConfirmOpen(false)
-        if (accepted) { alert('Generating EINs requested') }
+        if (accepted) {
+          DATA.generateEINs(election._id)
+            .then((newEIN) => {
+              election.EIN = newEIN
+              setConfirmOpen(false)
+            })
+            .catch((err) => {
+              alert('Error generating EINs')
+              console.error(err)
+              setConfirmOpen(false)
+            })
+        }
       },
       title: 'Generate EINs',
       message: `Are you sure you want to generate EINs for election ${election.name}?`
@@ -101,10 +112,10 @@ export default function PersonList (props) {
 
       <Grid item sm={12}>
         <ButtonGroup color="primary" variant="contained" aria-label="election button actions">
-          <Button endIcon={<EINIcon />} disabled={!EINDefined} onClick={generateEINs}>
+          <Button endIcon={<EINIcon />} disabled={EINDefined} onClick={generateEINs}>
             {'Generate EINs'}
           </Button>
-          <Button endIcon={<SendIcon />} onClick={showEmailForm}>
+          <Button endIcon={<SendIcon />} disabled={!EINDefined} onClick={showEmailForm}>
             {'Send Emails'}
           </Button>
         </ButtonGroup>
@@ -119,9 +130,9 @@ export default function PersonList (props) {
   )
 }
 
-PersonList.propTypes = {
+ElectionDetails.propTypes = {
   election: PropTypes.shape({
-    id: PropTypes.string,
+    _id: PropTypes.string,
     poolID: PropTypes.string,
     startDate: PropTypes.string,
     endDate: PropTypes.string,

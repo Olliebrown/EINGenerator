@@ -66,9 +66,9 @@ router.post('/', Express.json({ type: '*/*' }), async (req, res) => {
 })
 
 // Trigger EIN generation for indicated election
-router.post('/:id/generateEIN', async (req, res) => {
+router.post('/generateEIN', Express.json({ type: '*/*' }), async (req, res) => {
   // Attempt to retrieve election object
-  const electionID = req.params.id
+  const electionID = req.body?.id
   let election = null
   try {
     const match = await MONGO_ELECTION_CTRL.getElection(electionID)
@@ -98,12 +98,13 @@ router.post('/:id/generateEIN', async (req, res) => {
 
   // Attempt to generate the EIN list
   try {
-    election.makeNewEINList(pool.members, 9)
-    await MONGO_ELECTION_CTRL.updateElection(electionID, election)
+    election.makeNewEINList(pool, 9)
+    await MONGO_ELECTION_CTRL.updateElection(electionID, { EIN: election.EIN })
     return res.json({ success: true, message: 'EIN List generated', EIN: election.EIN })
   } catch (err) {
+    debug('EIN List Generation failed')
     return res.status(500).json({
-      error: true, message: 'Failed to generate and store EINs', err
+      error: true, message: 'Failed to update election and store EINs', errString: err.toString()
     })
   }
 })

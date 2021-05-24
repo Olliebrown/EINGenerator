@@ -1,5 +1,6 @@
 import Axios from 'axios'
 
+// Generic functions for all types
 export function getList (type) {
   return new Promise((resolve, reject) => {
     Axios.get(`${type}/`)
@@ -11,7 +12,7 @@ export function getList (type) {
 export function getItem (type, itemID) {
   return new Promise((resolve, reject) => {
     Axios.get(`${type}/${itemID}`)
-      .then((result) => { console.log('response:', result); resolve(result.data) })
+      .then((result) => { resolve(result.data) })
       .catch((error) => { reject(error) })
   })
 }
@@ -36,6 +37,15 @@ export function updateItem (type, itemID, itemData) {
   return new Promise((resolve, reject) => {
     Axios.post(`${type}/${itemID}/update`, itemData)
       .then((result) => { resolve(result.status) })
+      .catch((error) => { reject(error) })
+  })
+}
+
+// Specialized functions for specific types
+export function generateEINs (electionID) {
+  return new Promise((resolve, reject) => {
+    Axios.post('election/generateEIN', { id: electionID })
+      .then((result) => { resolve(result.data.EIN) })
       .catch((error) => { reject(error) })
   })
 }
