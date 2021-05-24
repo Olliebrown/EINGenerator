@@ -2,7 +2,7 @@ import Express from 'express'
 import MongoDB from 'mongodb'
 import Debug from 'debug'
 
-import * as EMAIL_HELP from '../utils/emailHelper'
+import * as EMAIL_HELP from '../utils/emailHelper.js'
 
 const debug = Debug('server:emailService')
 const router = new Express.Router()

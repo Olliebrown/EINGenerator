@@ -3,7 +3,7 @@ import nodemailer from 'nodemailer'
 
 // Import the handlebars template library and commonmark MD parser
 import Handlebars from 'handlebars'
-import Commonmark from 'commonmark'
+import * as Commonmark from 'commonmark'
 
 // Import local data objects and DB controllers
 import EmailJob from './EmailJob.js'

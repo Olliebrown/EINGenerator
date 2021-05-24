@@ -4,6 +4,7 @@ import Debug from 'debug'
 import VoterRouter from './api/voterRouter.js'
 import PoolRouter from './api/poolRouter.js'
 import ElectionRouter from './api/electionRouter.js'
+import EmailServiceRouter from './api/emailServiceRouter.js'
 
 const debug = Debug('server:main')
 const app = new Express()
@@ -18,6 +19,9 @@ app.use((req, res, next) => {
 app.use('/voter', VoterRouter)
 app.use('/pool', PoolRouter)
 app.use('/election', ElectionRouter)
+
+// Backend service API
+app.use('/email', EmailServiceRouter)
 
 // Statically served files
 app.use('/', Express.static('./public'))
