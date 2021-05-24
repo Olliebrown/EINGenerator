@@ -27,7 +27,7 @@ export function getItems (type, itemIDs) {
 export function newItem (type, itemData) {
   return new Promise((resolve, reject) => {
     Axios.put(`${type}/create`, itemData)
-      .then((result) => { resolve(result.status) })
+      .then((result) => { resolve(result.data) })
       .catch((error) => { reject(error) })
   })
 }

@@ -18,8 +18,8 @@ router.put('/create', Express.raw({ type: '*/*' }), async (req, res) => {
   // Attempt to parse body and insert
   try {
     const newVoter = Voter.parse(req.body)
-    await MONGO_CTRL.addToVoterList(newVoter)
-    return res.json({ success: true, message: 'New voter added to list', id: newVoter.id })
+    const result = await MONGO_CTRL.addToVoterList(newVoter)
+    return res.json({ success: true, message: 'New voter added to list', id: result[0] })
   } catch (err) {
     debug('Failed to insert voter')
     return res.status(400).json({

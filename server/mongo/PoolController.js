@@ -98,7 +98,7 @@ export async function addToPoolList (newPools) {
         // Insert the voter
         const result = await db.collection('pools').insertMany(pools)
         debug(`Inserted ${Object.values(result.insertedIds).length} pool(s)`)
-        return resolve(result.insertedIds)
+        return resolve(Object.values(result.insertedIds))
       } catch (err) {
         debug('Error inserting pool(s)', err)
         return reject(err)

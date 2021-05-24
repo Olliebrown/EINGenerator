@@ -17,8 +17,8 @@ router.put('/create', Express.raw({ type: '*/*' }), async (req, res) => {
   }
 
   try {
-    const newID = await MONGO_ELECTION_CTRL.addToElectionList(JSON.parse(req.body))
-    return res.json({ success: true, message: 'New election added to list', id: newID })
+    const newIDs = await MONGO_ELECTION_CTRL.addToElectionList(JSON.parse(req.body))
+    return res.json({ success: true, message: 'New election added to list', id: newIDs[0] })
   } catch (err) {
     debug('Failed to insert election')
     return res.status(400).json({

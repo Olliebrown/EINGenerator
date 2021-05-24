@@ -65,6 +65,19 @@ export default function PoolForm (props) {
     // Stop if invalid
     if (!isReady) throw false
 
+    // Attempt to create new voters
+    try {
+      for (let i = 0; i < members.length; i++) {
+        const response = await DATA.newItem('voter', members[i])
+        members[i] = response.id
+      }
+    } catch (err) {
+      alert('Error creating voter')
+      console.error(err)
+    }
+
+    console.log(members)
+
     // Attempt to create a pool object
     const newPool = new Pool({
       id: '*',
@@ -73,10 +86,17 @@ export default function PoolForm (props) {
       members
     })
 
+    console.log(newPool)
+
     // Attempt to insert the pool object
-    await DATA.newItem('pool', newPool)
-    if (refreshData) {
-      refreshData()
+    try {
+      await DATA.newItem('pool', newPool)
+      if (refreshData) {
+        refreshData()
+      }
+    } catch (err) {
+      alert('Error creating voter pool')
+      console.error(err)
     }
   }
 

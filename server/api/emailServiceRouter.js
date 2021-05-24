@@ -14,11 +14,13 @@ function isValidString (value) {
 function isValidSendBody ({ electionID, emailSubject, emailFrom, emailText }) {
   // Check basic types
   if (!isValidString(emailSubject) || !isValidString(emailFrom) || !isValidString(emailText)) {
+    debug('Missing property or incorrect type')
     return false
   }
 
   // Check objectID
   if (!MongoDB.ObjectID.isValid(electionID)) {
+    debug('Bad electionID')
     return false
   }
 
@@ -31,7 +33,6 @@ router.post('/send', Express.json({ type: '*/*' }), async (req, res) => {
   // Check body of request
   if (!req.body || !isValidSendBody(req.body)) {
     debug('Badly formed email send request')
-    debug(req.body)
     return res.status(400).json({
       error: true, message: 'Badly formed request body'
     })

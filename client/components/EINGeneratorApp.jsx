@@ -31,13 +31,17 @@ export default function EINGeneratorApp (props) {
 
   // Data from the endpoints
   const [poolData, updatePoolDate] = useState([])
+  const [poolDataLoading, updatePoolDataLoading] = useState(false)
   const [electionData, updateElectionDate] = useState([])
+  const [electionDataLoading, updateElectionDataLoading] = useState(false)
 
   // Async data retrieval
   const retrievePoolData = async () => {
     try {
+      updatePoolDataLoading(true)
       const newPoolData = await DATA.getList('pool')
       updatePoolDate(newPoolData)
+      updatePoolDataLoading(false)
     } catch (err) {
       console.error('Error retrieving pool data')
       console.error(err)
@@ -47,8 +51,10 @@ export default function EINGeneratorApp (props) {
 
   const retrieveElectionData = async () => {
     try {
+      updateElectionDataLoading(true)
       const newElectionData = await DATA.getList('election')
       updateElectionDate(newElectionData)
+      updateElectionDataLoading(false)
     } catch (err) {
       console.error('Error retrieving election data')
       console.error(err)
@@ -79,10 +85,10 @@ export default function EINGeneratorApp (props) {
         </Tabs>
       </AppBar>
       <TabPanel value={currentTabIndex} index={0}>
-        <ExpandableList type="pool" refreshData={retrievePoolData} itemsData={poolData} />
+        <ExpandableList type="pool" loading={poolDataLoading} refreshData={retrievePoolData} itemsData={poolData} />
       </TabPanel>
       <TabPanel value={currentTabIndex} index={1}>
-        <ExpandableList type="election" refreshData={retrieveElectionData} itemsData={electionData} secondaryData={poolData} />
+        <ExpandableList type="election" loading={electionDataLoading} refreshData={retrieveElectionData} itemsData={electionData} secondaryData={poolData} />
       </TabPanel>
     </div>
   )

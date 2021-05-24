@@ -31,7 +31,7 @@ export function addEmailJob (newJob) {
         // Insert the voter
         const result = await db.collection('emailJobs').insertOne(newJobDoc)
         debug(`Inserted new Email Job ${result._id}`)
-        return resolve(result.insertedIds)
+        return resolve(result._id)
       } catch (err) {
         debug('Error inserting email job', err)
         return reject(err)

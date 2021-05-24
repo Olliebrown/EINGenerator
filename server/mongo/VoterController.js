@@ -86,7 +86,7 @@ export async function addToVoterList (newVoters) {
         // Insert the voter
         const result = await db.collection('voters').insertMany(voters)
         debug(`Inserted ${Object.values(result.insertedIds).length} voter(s)`)
-        return resolve(result.insertedIds)
+        return resolve(Object.values(result.insertedIds))
       } catch (err) {
         debug('Error inserting voter(s)', err)
         return reject(err)

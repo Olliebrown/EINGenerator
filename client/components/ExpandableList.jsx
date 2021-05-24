@@ -47,7 +47,7 @@ const SKELETON_COUNT = 5
 
 export default function ExpandableList (props) {
   // Destructure props
-  const { itemsData, secondaryData, type, refreshData } = props
+  const { loading, itemsData, secondaryData, type, refreshData } = props
 
   // Generate style class names
   const classes = useStyles()
@@ -65,12 +65,10 @@ export default function ExpandableList (props) {
   }
 
   // Click callback for the add button
-  const onAddClick = () => {
-    setModalOpen(true)
-  }
+  const onAddClick = () => { setModalOpen(true) }
 
   // Is the list empty?
-  if (itemsData.length < 1) {
+  if (itemsData.length < 1 && loading) {
     return (
       <div className={classes.root}>
         <Grid
@@ -134,7 +132,12 @@ export default function ExpandableList (props) {
   return (
     <React.Fragment>
       <div className={classes.root}>
-        {listItems}
+        {(listItems.length > 0 &&
+          listItems
+        )}
+        {(listItems.length < 1 &&
+          <Typography>{'List is empty'}</Typography>
+        )}
 
         <Fab aria-label="add" className={classes.addButton} color="primary">
           <AddIcon onClick={onAddClick} />
@@ -159,6 +162,7 @@ const dataShape = {
 }
 
 ExpandableList.propTypes = {
+  loading: PropTypes.bool,
   itemsData: PropTypes.arrayOf(
     PropTypes.shape(dataShape)
   ),
@@ -170,6 +174,7 @@ ExpandableList.propTypes = {
 }
 
 ExpandableList.defaultProps = {
+  loading: false,
   itemsData: [],
   secondaryData: [],
   type: 'none',
