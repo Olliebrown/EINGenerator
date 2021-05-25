@@ -1,9 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-// Import the commonmark MD parser
-import * as Commonmark from 'commonmark'
-
 // Import Material-UI components
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
@@ -41,10 +38,22 @@ export default function EmailForm (props) {
     if (emailFrom.trim() === '') {
       updateEmailFromError('Email subject cannot be blank')
       isValid = false
-    // eslint-disable-next-line no-useless-escape
-    } else if (!emailFrom.match(/^[^@\s]+@[^@\s\.]+\.[^@\.\s]+$/)) {
-      updateEmailFromError('Must be a valid email address')
-      isValid = false
+    } else {
+      const matches = emailFrom.match(/(?<name>.*)<(?<email>.*)>/)
+      if (matches === null) {
+        // eslint-disable-next-line no-useless-escape
+        if (!emailFrom.match(/^[^@\s]+@[^@\s\.]+\.[^@\.\s]+$/)) {
+          updateEmailFromError('Must be a valid email address')
+          isValid = false
+        }
+      } else {
+        const rawEmail = matches.groups.email?.trim()
+        // eslint-disable-next-line no-useless-escape
+        if (!rawEmail.match(/^[^@\s]+@[^@\s\.]+\.[^@\.\s]+$/)) {
+          updateEmailFromError('Must be a valid email address')
+          isValid = false
+        }
+      }
     }
 
     if (emailText.trim() === '') {
@@ -52,9 +61,7 @@ export default function EmailForm (props) {
       isValid = false
     }
 
-    if (!isValid) {
-      throw false
-    }
+    if (!isValid) { throw false }
 
     // Continue ...
     if (onSend) { onSend(emailFrom, emailSubject, emailText) }

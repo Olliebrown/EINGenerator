@@ -39,7 +39,7 @@ const SMTP_TEST_CONFIG = {
 }
 
 // Always default to testing!
-const SMTP_TEST_ONLY = (process.env.SMTP_TEST_ONLY || true)
+const SMTP_SEND = (process.env.SMTP_SEND || false)
 
 // Create debug interface
 const debug = Debug('server:emailHelper')
@@ -91,7 +91,7 @@ export async function sendEmails (emailJob) {
 
   // Create the nodemailer transport object
   const transporter = nodemailer.createTransport(
-    (SMTP_TEST_ONLY ? SMTP_TEST_CONFIG : SMTP_SIB_CONFIG)
+    (SMTP_SEND ? SMTP_SIB_CONFIG : SMTP_TEST_CONFIG)
   )
 
   // Pre-compile the message template (if handlebars are detected)
@@ -125,7 +125,7 @@ export async function sendEmails (emailJob) {
 
     // Send the email (using nodemailer)
     try {
-      debug(`> Sending ${(SMTP_TEST_ONLY ? 'TEST' : '')} email to '${to}'`)
+      debug(`> Sending ${(SMTP_SEND ? '' : 'TEST')} email to '${to}'`)
       const messageInfo = await sendOneEmail(transporter, to, emailJob.from, emailJob.subject, compiledBodyText)
       emailJob.addStatus(messageInfo, voters[i]._id, voters[i].email)
     } catch (err) {
