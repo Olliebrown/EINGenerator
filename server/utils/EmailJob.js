@@ -68,7 +68,7 @@ export default class EmailJob {
     }
   }
 
-  addStatus (info, voter) {
+  addStatus (info, voterID, voterEmail) {
     let messageStatus = 'unknown'
     if (info.accepted && info.accepted.length > 0) {
       messageStatus = 'accepted'
@@ -78,11 +78,11 @@ export default class EmailJob {
       messageStatus = 'pending'
     }
 
-    if (voter) {
-      this.updateStatusCount(voter.id, messageStatus)
-      this.status[voter.id] = {
+    if (voterID) {
+      this.updateStatusCount(voterID, messageStatus)
+      this.status[voterID] = {
         messageId: info.messageId,
-        email: voter.email,
+        email: voterEmail || 'unknown',
         status: messageStatus
       }
     } else {
@@ -90,12 +90,12 @@ export default class EmailJob {
     }
   }
 
-  addFailure (err, voter) {
-    if (voter) {
+  addFailure (err, voterID, voterEmail) {
+    if (voterID) {
       this.failedCount++
-      this.status[voter.id] = {
+      this.status[voterID] = {
         messageId: 'none',
-        email: voter.email,
+        email: voterEmail || 'unknown',
         status: 'failure',
         error: err
       }

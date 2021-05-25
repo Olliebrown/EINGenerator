@@ -3,3 +3,4 @@ public/*.js.map
 node_modules
 .env
 errors.txt
+TestEmailText.md

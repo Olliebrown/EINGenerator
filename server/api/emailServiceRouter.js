@@ -42,7 +42,7 @@ router.post('/send', Express.json({ type: '*/*' }), async (req, res) => {
   const { electionID, emailSubject, emailFrom, emailText } = req.body
 
   // Start the email send job
-  const emailJobID = EMAIL_HELP.sendEmails(electionID, emailFrom, emailSubject, emailText)
+  const emailJobID = await EMAIL_HELP.startEmailJob(electionID, emailFrom, emailSubject, emailText)
   return res.json({
     success: true, message: 'Email send job started', id: emailJobID
   })

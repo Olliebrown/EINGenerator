@@ -52,6 +52,8 @@ export default function ElectionDetails (props) {
   // Callback for generating EINs
   const generateEINs = () => {
     setConfirmState({
+      title: 'Generate EINs',
+      message: `Are you sure you want to generate EINs for election ${election.name}?`,
       handleClose: (accepted) => {
         if (accepted) {
           DATA.generateEINs(election._id)
@@ -65,9 +67,7 @@ export default function ElectionDetails (props) {
               setConfirmOpen(false)
             })
         }
-      },
-      title: 'Generate EINs',
-      message: `Are you sure you want to generate EINs for election ${election.name}?`
+      }
     })
     setConfirmOpen(true)
   }
@@ -80,21 +80,32 @@ export default function ElectionDetails (props) {
     setEmailOpen(true)
   }
 
-  const onSendEmail = (emailText) => {
-    const voterCount = EINDefined ? Object.keys(election.EIN).length : 0
+  const onSendEmail = (emailFrom, emailSubject, emailText) => {
+    const voterCount = (EINDefined ? Object.keys(election.EIN).length : 0)
     const plural = (voterCount === 1 ? 'voter' : 'voters')
     setConfirmState({
-      handleClose: (accepted) => {
-        setConfirmOpen(false)
-        if (accepted) { alert('Sending Emails requested') }
-      },
       title: 'Send Election Emails',
-      message: `Are you sure you want to send emails to ${voterCount} ${plural} for election ${election.name}?`
+      message: `Are you sure you want to send emails to ${voterCount} ${plural} for election ${election.name}?`,
+      handleClose: (accepted) => {
+        if (accepted) {
+          DATA.sendEmails(election._id, emailFrom, emailSubject, emailText)
+            .then((jobID) => {
+              console.log('JOB ID:', jobID)
+              alert(`Email job ${jobID.toString()} Created`)
+              setConfirmOpen(false)
+            })
+            .catch((err) => {
+              alert('Error sending emails')
+              console.error(err)
+              setConfirmOpen(false)
+            })
+        }
+      }
     })
     setConfirmOpen(true)
   }
 
-  // Render list of people
+  // Render Election details
   return (
     <>
       <Grid item sm={12}>
@@ -138,6 +149,7 @@ ElectionDetails.propTypes = {
     endDate: PropTypes.string,
     name: PropTypes.string,
     description: PropTypes.string,
-    EIN: PropTypes.object
+    EIN: PropTypes.object,
+    emailJobs: PropTypes.arrayOf(PropTypes.string)
   }).isRequired
 }

@@ -31,8 +31,7 @@ const SMTP_SIB_CONFIG = {
 // Testing config (ethereal.email)
 const SMTP_TEST_CONFIG = {
   host: 'smtp.ethereal.email',
-  port: 465,
-  secure: true,
+  port: 587,
   auth: {
     user: (process.env.TEST_SMTP_USER || 'unknown'),
     pass: (process.env.TEST_SMTP_PW || 'bad-pass')
@@ -56,18 +55,18 @@ const MDWriter = new Commonmark.HtmlRenderer()
 export function startEmailJob (electionID, emailFrom, emailSubject, emailText) {
   return new Promise((resolve, reject) => {
     // Construct a new email job object
-    const job = new EmailJob({
+    const newEmailJob = new EmailJob({
       id: '*', electionID, from: emailFrom, subject: emailSubject, bodyText: emailText
     })
 
     // Generate and return an ID
-    MONGO_EMAIL_CTRL.addEmailJob(job)
+    MONGO_EMAIL_CTRL.addEmailJob(newEmailJob)
       .then((newJobID) => {
         // Update job id
-        job.id = newJobID
+        newEmailJob.id = newJobID
 
         // Start the sending job (returns immediately) then resolve with job ID
-        sendEmails(job)
+        sendEmails(newEmailJob)
         return resolve(newJobID)
       })
       .catch((err) => {
@@ -83,7 +82,7 @@ export async function sendEmails (emailJob) {
   const [election, voters] = await DATA_HELP.getElectionDetails(emailJob.electionID, true)
   if (!election || !voters) {
     debug('Invalid election or voter list for sending emails')
-    emailJob.addFailure('none', 'Invalid election or voter list for sending emails')
+    emailJob.addFailure('Invalid election or voter list for sending emails')
     return
   }
 
@@ -95,23 +94,54 @@ export async function sendEmails (emailJob) {
     (SMTP_TEST_ONLY ? SMTP_TEST_CONFIG : SMTP_SIB_CONFIG)
   )
 
+  // Pre-compile the message template (if handlebars are detected)
+  let msgTemplate = null
+  try {
+    if (emailJob.bodyText.match(/\{\{.*\}\}/)) {
+      msgTemplate = Handlebars.compile(emailJob.bodyText)
+    }
+  } catch (err) {
+    emailJob.addFailure('Invalid Handlebars Template')
+    debug('Invalid Handlebars Template')
+    debug(err)
+    return
+  }
+
   // Start sending emails
+  debug(`Sending ${voters.length} email(s):`)
   for (let i = 0; i < voters.length; i++) {
     // Gather needed data
     const to = voters[i].email
-    const templateData = {
-      EIN: election.EINs[voters[i].id][0],
-      voter: voters[i],
-      election: election[i]
+
+    // Fill in template (if exists)
+    let compiledBodyText = emailJob.bodyText
+    if (msgTemplate) {
+      compiledBodyText = msgTemplate({
+        EIN: election.EIN[voters[i]._id][0],
+        voter: voters[i],
+        election: election
+      })
     }
 
     // Send the email (using nodemailer)
     try {
-      const messageInfo = await sendOneEmail(transporter, to, emailJob.from, emailJob.subject, emailJob.bodyText, templateData)
-      emailJob.addStatus(voters[i].id, messageInfo)
+      debug(`> Sending ${(SMTP_TEST_ONLY ? 'TEST' : '')} email to '${to}'`)
+      const messageInfo = await sendOneEmail(transporter, to, emailJob.from, emailJob.subject, compiledBodyText)
+      emailJob.addStatus(messageInfo, voters[i]._id, voters[i].email)
     } catch (err) {
-      emailJob.addFailure(voters[i].id, err)
+      debug('      Error sending')
+      debug(err)
+      emailJob.addFailure(err, voters[i]._id, voters[i].email)
     }
+
+    // Update email job status
+    await MONGO_EMAIL_CTRL.updateEmailJob(emailJob.id, {
+      expected: emailJob.expected,
+      successCount: emailJob.successCount,
+      pendingCount: emailJob.pendingCount,
+      failedCount: emailJob.failedCount,
+      status: emailJob.status
+    })
 
     // Throttle sending by waiting
     if (THROTTLE_TIME) {
@@ -132,11 +162,16 @@ function sendOneEmail (transporter, to, from, subject, bodyText, templateData = 
   const bodyHTML = MDWriter.render(AST)
 
   // Send the email
-  return transporter.sendMail({
-    from: from,
-    to: to,
-    subject: subject,
-    text: bodyText,
-    html: bodyHTML
+  return new Promise((resolve, reject) => {
+    transporter.sendMail({
+      from: from,
+      to: to,
+      subject: subject,
+      text: bodyText,
+      html: bodyHTML
+    }, (err, info) => {
+      if (err) { return reject(err) }
+      return resolve(info)
+    })
   })
 }

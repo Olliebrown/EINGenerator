@@ -10,28 +10,37 @@ export { closeClient }
 // Add new voter
 export function addEmailJob (newJob) {
   return new Promise((resolve, reject) => {
-    if (!Array.isArray(newJob.toIDs)) {
+    // Ensure we have a valid electionID
+    if (!newJob.electionID || !MongoDB.ObjectID.isValid(newJob.electionID)) {
       return reject(new Error('Improperly formed job'))
     }
 
     // Sanitize document before inserting
     const newJobDoc = {
-      toIDs: newJob.toIDs.map((id) => (new MongoDB.ObjectID(id))),
+      electionID: new MongoDB.ObjectID(newJob.electionID),
       from: newJob.from,
       subject: newJob.subject,
       bodyText: newJob.bodyText,
+      expected: newJob.expected || 0,
       successCount: 0,
-      failCount: 0,
-      errorList: []
+      pendingCount: 0,
+      failedCount: 0,
+      status: null
     }
 
     // Run the query to insert the data
     runQuery(async (db) => {
       try {
-        // Insert the voter
+        // Validate the election id
+        const election = await db.collection('elections').findOne({ _id: new MongoDB.ObjectID(newJob.electionID) })
+        if (election === null) {
+          return reject(new Error(`Invalid electionID ${newJob.electionID})`))
+        }
+
+        // Insert the email job
         const result = await db.collection('emailJobs').insertOne(newJobDoc)
-        debug(`Inserted new Email Job ${result._id}`)
-        return resolve(result._id)
+        debug(`Inserted new Email Job ${result.insertedId}`)
+        return resolve(result.insertedId)
       } catch (err) {
         debug('Error inserting email job', err)
         return reject(err)
@@ -76,7 +85,8 @@ export function updateEmailJob (emailJobID, newJobDetails) {
       try {
         // Basic updateOne call
         const result = await db.collection('emailJobs').updateOne(
-          { _id: emailJobID }, newJobDetails
+          { _id: emailJobID },
+          { $set: newJobDetails }
         )
 
         // Check that ONE item was modified

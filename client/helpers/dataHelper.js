@@ -41,11 +41,19 @@ export function updateItem (type, itemID, itemData) {
   })
 }
 
-// Specialized functions for specific types
+// Specialized functions for specific actions/services
 export function generateEINs (electionID) {
   return new Promise((resolve, reject) => {
     Axios.post('election/generateEIN', { id: electionID })
       .then((result) => { resolve(result.data.EIN) })
+      .catch((error) => { reject(error) })
+  })
+}
+
+export function sendEmails (electionID, emailFrom, emailSubject, emailText) {
+  return new Promise((resolve, reject) => {
+    Axios.post('email/send', { electionID, emailSubject, emailFrom, emailText })
+      .then((result) => { resolve(result.data.id) })
       .catch((error) => { reject(error) })
   })
 }
