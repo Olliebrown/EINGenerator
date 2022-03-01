@@ -64,30 +64,35 @@ export default function ExpandableList (props) {
     setModalOpen(openState)
   }
 
+  // Track a request to edit an item
+  const [itemToEdit, setItemToEdit] = React.useState(-1)
+
   // Click callback for the add button
-  const onAddClick = () => { setModalOpen(true) }
+  const onAddClick = () => {
+    setItemToEdit(-1)
+    setModalOpen(true)
+  }
+
+  // Callback for editing an existing item
+  const onEdit = (itemID) => {
+    const matchingIndex = itemsData.findIndex((item) => (item._id === itemID))
+    if (matchingIndex >= 0) {
+      setItemToEdit(matchingIndex)
+      setModalOpen(true)
+    } else {
+      alert('Failed to find item ' + itemID)
+    }
+  }
 
   // Is the list empty?
   if (itemsData.length < 1 && loading) {
     return (
       <div className={classes.root}>
-        <Grid
-          container
-          spacing={1}
-        >
+        <Grid container spacing={1} >
           {[...Array(SKELETON_COUNT).keys()].map(
             (value) => (
-              <Grid
-                item
-                key={value}
-                sm={12}
-              >
-                <Skeleton
-                  animation="wave"
-                  height={50}
-                  variant="rect"
-                  width="100%"
-                />
+              <Grid item key={value} sm={12} >
+                <Skeleton animation="wave" height={50} variant="rect" width="100%" />
               </Grid>
             )
           )}
@@ -123,6 +128,7 @@ export default function ExpandableList (props) {
         <ItemViewDetails
           itemID={itemData._id}
           type={type}
+          onEdit={onEdit}
         />
       </Accordion>
     )
@@ -145,11 +151,11 @@ export default function ExpandableList (props) {
       </div>
 
       {(type === 'pool' &&
-        <PoolForm modalOpen={modalOpen} refreshData={refreshData} onModalToggle={handleModalToggle} />
+        <PoolForm modalOpen={modalOpen} refreshData={refreshData} onModalToggle={handleModalToggle} isUpdate={itemToEdit >= 0} itemData={itemToEdit >= 0 ? itemsData[itemToEdit] : null} />
       )}
 
       {(type === 'election' &&
-        <ElectionForm modalOpen={modalOpen} refreshData={refreshData} onModalToggle={handleModalToggle} voterPools={secondaryData} />
+        <ElectionForm modalOpen={modalOpen} refreshData={refreshData} onModalToggle={handleModalToggle} voterPools={secondaryData} isUpdate={itemToEdit >= 0} itemData={itemToEdit >= 0 ? itemsData[itemToEdit] : null} />
       )}
     </React.Fragment>
   )

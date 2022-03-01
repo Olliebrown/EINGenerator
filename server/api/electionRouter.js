@@ -27,6 +27,29 @@ router.put('/create', Express.raw({ type: '*/*' }), async (req, res) => {
   }
 })
 
+// Update details for indicated election
+router.post('/:id/update', Express.raw({ type: '*/*' }), async (req, res) => {
+  // Validate provided request body
+  if (!req.body) {
+    debug('Request body invalid or missing')
+    return res.status(400).json({ error: true, message: 'body of request missing' })
+  }
+
+  const electionID = req.params.id
+
+  try {
+    const newElection = JSON.parse(req.body)
+    await MONGO_ELECTION_CTRL.updateElection(electionID, newElection)
+
+    return res.json({ success: true, message: 'Election updated' })
+  } catch (err) {
+    debug('Failed to update election')
+    return res.status(400).json({
+      error: true, message: `Failed to update election: ${err.message}`
+    })
+  }
+})
+
 // Retrieve summary list of elections
 router.get('/', async (req, res) => {
   try {
@@ -44,6 +67,20 @@ router.get('/:id', async (req, res) => {
 
   try {
     const match = await MONGO_ELECTION_CTRL.getElection(electionID)
+    return res.json(match)
+  } catch (err) {
+    return res.status(404).json({
+      error: true, message: `Election not found with ID ${electionID}`, err
+    })
+  }
+})
+
+// Retrieve email table for indicated election
+router.get(':id/emailTable', async (req, res) => {
+  const electionID = req.params.id
+
+  try {
+    const match = await MONGO_ELECTION_CTRL.getElectionEmailTable(electionID)
     return res.json(match)
   } catch (err) {
     return res.status(404).json({

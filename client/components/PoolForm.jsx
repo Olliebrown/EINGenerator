@@ -55,8 +55,12 @@ export default function PoolForm (props) {
     } else {
       members = rawVoterList.split(/\r?\n/g)
       try {
-        members = members.map((item) => (Voter.parseEmailString(item)))
+        members = members.map((item) => {
+          return Voter.parseEmailString(item)
+        })
       } catch (err) {
+        console.error('Failed to parse voter data:')
+        console.error(err)
         updateVoterListError('Format Invalid')
         isReady = false
       }

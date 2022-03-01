@@ -13,7 +13,7 @@ import * as DATA from '../helpers/dataHelper.js'
 
 export default function ItemViewDetails (props) {
   // Destructure props
-  const { type, itemID } = props
+  const { type, itemID, ...restProps } = props
 
   // Track item id of expanded panel and expanded state
   const [itemDetails, setItemDetails] = useState(null)
@@ -58,11 +58,11 @@ export default function ItemViewDetails (props) {
         </Grid>
         {(type === 'pool' &&
           <Grid item sm={12}>
-            <PersonList people={itemDetails.members} />
+            <PersonList people={itemDetails.members} {...restProps} />
           </Grid>
         )}
         {(type === 'election' &&
-          <ElectionDetails election={itemDetails} />
+          <ElectionDetails election={itemDetails} {...restProps} />
         )}
       </Grid>
     </AccordionDetails>

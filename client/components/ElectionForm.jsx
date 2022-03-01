@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import TextField from '@material-ui/core/TextField'
@@ -19,7 +19,7 @@ import * as DATA from '../helpers/dataHelper.js'
 
 export default function ElectionForm (props) {
   // Destructure props
-  const { modalOpen, onModalToggle, refreshData, voterPools } = props
+  const { modalOpen, onModalToggle, refreshData, voterPools, itemData, isUpdate } = props
 
   // State for managed form inputs
   const [electionName, updateElectionName] = useState('')
@@ -27,10 +27,43 @@ export default function ElectionForm (props) {
   const [startDate, updateStartDate] = useState(moment())
   const [endDate, updateEndDate] = useState(moment())
   const [electionPool, updateElectionPool] = useState('')
+  const [formURL, updateFormURL] = useState('')
+  const [sheetURL, updateSheetURL] = useState('')
 
   // Form field error states
   const [nameError, updateNameError] = useState(false)
   const [endDateError, updateEndDateError] = useState(' ')
+  const [disablePool, updateDisablePool] = useState(false)
+
+  // Lookup data if we are editing an existing item
+  useEffect(() => {
+    // Function to asynchronously lookup an item
+    const lookupItem = async () => {
+      if (itemData?._id) {
+        try {
+          const electionInfo = await DATA.getItem('election', itemData._id)
+          console.log('Election Info', electionInfo)
+          updateElectionName(electionInfo.name || '')
+          updateElectionDescription(electionInfo.description || '')
+          updateStartDate(moment(electionInfo.startDate))
+          updateEndDate(moment(electionInfo.endDate))
+          updateElectionPool(electionInfo.poolID || '')
+          updateFormURL(electionInfo.formURL || '')
+          updateSheetURL(electionInfo.sheetURL || '')
+
+          if (electionInfo.EIN) {
+            updateDisablePool(true)
+          }
+        } catch (err) {
+          alert('Error looking up election "' + itemData._id + '"')
+          console.error(err)
+        }
+      }
+    }
+
+    // Run the async function
+    lookupItem()
+  }, [itemData])
 
   // Handle form submission
   const formSubmitted = async () => {
@@ -51,14 +84,28 @@ export default function ElectionForm (props) {
     // Stop if invalid
     if (!isReady) throw false
 
-    // Attempt to insert the pool object
-    await DATA.newItem('election', {
-      name: electionName,
-      description: electionDescription,
-      startDate: startDate.toDate(),
-      endDate: endDate.toDate(),
-      poolID: electionPool
-    })
+    // Attempt to insert/update the election object
+    if (isUpdate) {
+      await DATA.updateItem('election', itemData._id, {
+        name: electionName,
+        description: electionDescription,
+        startDate: startDate.toDate(),
+        endDate: endDate.toDate(),
+        poolID: electionPool,
+        sheetURL: sheetURL,
+        formURL: formURL
+      })
+    } else {
+      await DATA.newItem('election', {
+        name: electionName,
+        description: electionDescription,
+        startDate: startDate.toDate(),
+        endDate: endDate.toDate(),
+        poolID: electionPool,
+        sheetURL: sheetURL,
+        formURL: formURL
+      })
+    }
     if (refreshData) {
       refreshData()
     }
@@ -66,17 +113,19 @@ export default function ElectionForm (props) {
 
   return (
     <DialogForm
-      addLabel="Create Election"
+      addLabel={isUpdate ? 'Save Changes' : 'Create Election'}
       onToggle={onModalToggle}
       open={modalOpen}
       onFormSubmit={formSubmitted}
-      title="Add New Election"
+      title={isUpdate ? 'Update Existing Election' : 'Add New Election'}
       type="election"
     >
 
       <DialogContent>
         <DialogContentText>
-          {'To create a new Election, please enter the information below.'}
+          {isUpdate
+            ? 'To update the election, edit the info below.'
+            : 'To create a new Election, please enter the information below.'}
         </DialogContentText>
         <form noValidate autoComplete="off">
           <Grid container spacing={3}>
@@ -105,6 +154,30 @@ export default function ElectionForm (props) {
                 fullWidth
                 value={electionDescription}
                 onChange={(e) => { updateElectionDescription(e.target.value) }}
+              />
+            </Grid>
+            <Grid item sm={6}>
+              <TextField
+                margin="dense"
+                id="votingFormURL"
+                label="Voting Form URL"
+                type="url"
+                variant="outlined"
+                fullWidth
+                value={formURL}
+                onChange={(e) => { updateFormURL(e.target.value) }}
+              />
+            </Grid>
+            <Grid item sm={6}>
+              <TextField
+                margin="dense"
+                id="resultsSheetURL"
+                label="Results Spreadsheet URL"
+                type="url"
+                variant="outlined"
+                fullWidth
+                value={sheetURL}
+                onChange={(e) => { updateSheetURL(e.target.value) }}
               />
             </Grid>
             <Grid item sm={6}>
@@ -139,14 +212,15 @@ export default function ElectionForm (props) {
             <Grid item sm={12}>
               <FormControl variant="outlined" fullWidth>
                 <InputLabel id="poolSelectLabel">
-                  {'Voter Pool'}
+                  {disablePool ? 'Voter Pool (EINs already generated)' : 'Voter Pool'}
                 </InputLabel>
                 <Select
                   labelId="poolSelectLabel"
                   id="poolSelect"
                   value={electionPool}
                   onChange={(e) => { updateElectionPool(e.target.value) }}
-                  label="Voter Pool"
+                  label={disablePool ? 'Voter Pool (EINs already generated)' : 'Voter Pool'}
+                  disabled={disablePool}
                 >
                   { voterPools.map((pool) => (
                     <MenuItem key={pool._id} value={pool._id}>
@@ -166,6 +240,8 @@ export default function ElectionForm (props) {
 ElectionForm.propTypes = {
   modalOpen: PropTypes.bool.isRequired,
   onModalToggle: PropTypes.func.isRequired,
+  itemData: PropTypes.object,
+  isUpdate: PropTypes.bool,
   refreshData: PropTypes.func,
   voterPools: PropTypes.arrayOf(
     PropTypes.shape({
@@ -177,5 +253,7 @@ ElectionForm.propTypes = {
 
 ElectionForm.defaultProps = {
   voterPools: [],
-  refreshData: null
+  refreshData: null,
+  itemData: null,
+  isUpdate: false
 }

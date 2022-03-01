@@ -6,7 +6,7 @@ import EIN from './EIN.js'
 const debug = Debug('server:Election')
 
 class Election {
-  constructor ({ _id, id, name, description, startDate, endDate, poolID, EIN }) {
+  constructor ({ _id, id, name, description, startDate, endDate, poolID, EIN, sheetURL }) {
     if (id === undefined && _id === undefined) {
       debug('id cannot be undefined for a new Election')
       throw new Error('id cannot be undefined for a new Election')
@@ -25,6 +25,7 @@ class Election {
 
     this.name = name || ''
     this.description = description || ''
+    this.sheetURL = sheetURL || ''
     this.EIN = EIN || null
   }
 
