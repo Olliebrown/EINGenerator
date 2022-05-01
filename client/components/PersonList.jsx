@@ -10,7 +10,7 @@ import ListItemText from '@material-ui/core/ListItemText'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 
 import Avatar from '@material-ui/core/Avatar'
-import ImageIcon from '@material-ui/icons/Person'
+import { Person as ImageIcon } from '@material-ui/icons'
 
 import * as DATA from '../helpers/dataHelper.js'
 
@@ -41,13 +41,13 @@ export default function PersonList (props) {
   }
 
   // Setup person data state
-  const [peopleData, updatePeopleData] = useState([])
+  const [peopleData, setPeopleData] = useState([])
   useEffect(async () => {
     if (people.length > 1) {
       console.log(`Retrieve details voters ${people}`)
       try {
         const newData = await DATA.getItems('voter', people)
-        updatePeopleData(newData)
+        setPeopleData(newData)
       } catch (err) {
         console.error('Failed to retrieve voters')
         console.error(err)

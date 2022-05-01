@@ -16,48 +16,48 @@ export default function EmailForm (props) {
   const { modalOpen, onModalToggle, onSend } = props
 
   // Markdown element state
-  const [emailFrom, updateEmailFrom] = useState('')
-  const [emailFromError, updateEmailFromError] = useState(' ')
+  const [emailFrom, setEmailFrom] = useState('')
+  const [emailFromError, setEmailFromError] = useState(' ')
 
-  const [emailSubject, updateEmailSubject] = useState('')
-  const [emailSubjectError, updateEmailSubjectError] = useState(' ')
+  const [emailSubject, setEmailSubject] = useState('')
+  const [emailSubjectError, setEmailSubjectError] = useState(' ')
 
-  const [emailText, updateEmailText] = useState(' ')
-  const [emailTextError, updateEmailTextError] = useState(' ')
-  const clearTextError = () => { updateEmailTextError(' ') }
+  const [emailText, setEmailText] = useState(' ')
+  const [emailTextError, setEmailTextError] = useState(' ')
+  const clearTextError = () => { setEmailTextError(' ') }
 
   // Handle form submission
   const formSubmitted = async () => {
     // Validate
     let isValid = true
     if (emailSubject.trim() === '') {
-      updateEmailSubjectError('Email subject cannot be blank')
+      setEmailSubjectError('Email subject cannot be blank')
       isValid = false
     }
 
     if (emailFrom.trim() === '') {
-      updateEmailFromError('Email subject cannot be blank')
+      setEmailFromError('Email subject cannot be blank')
       isValid = false
     } else {
       const matches = emailFrom.match(/(?<name>.*)<(?<email>.*)>/)
       if (matches === null) {
         // eslint-disable-next-line no-useless-escape
         if (!emailFrom.match(/^[^@\s]+@[^@\s\.]+\.[^@\.\s]+$/)) {
-          updateEmailFromError('Must be a valid email address')
+          setEmailFromError('Must be a valid email address')
           isValid = false
         }
       } else {
         const rawEmail = matches.groups.email?.trim()
         // eslint-disable-next-line no-useless-escape
         if (!rawEmail.match(/^[^@\s]+@[^@\s\.]+\.[^@\.\s]+$/)) {
-          updateEmailFromError('Must be a valid email address')
+          setEmailFromError('Must be a valid email address')
           isValid = false
         }
       }
     }
 
     if (emailText.trim() === '') {
-      updateEmailTextError('Email text cannot be empty')
+      setEmailTextError('Email text cannot be empty')
       isValid = false
     }
 
@@ -94,8 +94,8 @@ export default function EmailForm (props) {
               error={emailFromError !== ' '}
               fullWidth
               value={emailFrom}
-              onChange={(e) => { updateEmailFrom(e.target.value) }}
-              onBlur={() => { updateEmailFromError(' ') }}
+              onChange={(e) => { setEmailFrom(e.target.value) }}
+              onBlur={() => { setEmailFromError(' ') }}
             />
           </Grid>
           <Grid item sm={12}>
@@ -109,14 +109,14 @@ export default function EmailForm (props) {
               error={emailSubjectError !== ' '}
               fullWidth
               value={emailSubject}
-              onChange={(e) => { updateEmailSubject(e.target.value) }}
-              onBlur={() => { updateEmailSubjectError(' ') }}
+              onChange={(e) => { setEmailSubject(e.target.value) }}
+              onBlur={() => { setEmailSubjectError(' ') }}
             />
           </Grid>
           <Grid item sm={12}>
             <TinyMarkdownEditor
               content={emailText}
-              onContentChanged={updateEmailText}
+              onContentChanged={setEmailText}
               errorMessage={emailTextError}
               clearError={clearTextError}
             />

@@ -44,6 +44,7 @@
         "react/static-property-placement": "off",
         "react/jsx-fragments": "off",
         "react/no-array-index-key": "off",
+        "react/hook-use-state": "warn",
         "import/no-unresolved": [2],
         "indent": "warn",
         "quotes": "warn",

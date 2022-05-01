@@ -29,13 +29,13 @@ export default function PoolForm (props) {
   const classes = useStyles()
 
   // Form state for managed inputs
-  const [poolName, updatePoolName] = useState('')
-  const [poolDescription, updatePoolDescription] = useState('')
-  const [rawVoterList, updateRawVoterList] = useState('')
+  const [poolName, setPoolName] = useState('')
+  const [poolDescription, setPoolDescription] = useState('')
+  const [rawVoterList, setRawVoterList] = useState('')
 
   // Form field error states
-  const [nameError, updateNameError] = useState(false)
-  const [voterListError, updateVoterListError] = useState(' ')
+  const [nameError, setNameError] = useState(false)
+  const [voterListError, setVoterListError] = useState(' ')
 
   // Handle form submission
   const formSubmitted = async () => {
@@ -43,14 +43,14 @@ export default function PoolForm (props) {
 
     // Check the pool name
     if (poolName === '') {
-      updateNameError(true)
+      setNameError(true)
       isReady = false
     }
 
     // Process the raw voter list data
     let members = null
     if (rawVoterList === '') {
-      updateVoterListError('Must provide at least 1 voter')
+      setVoterListError('Must provide at least 1 voter')
       isReady = false
     } else {
       members = rawVoterList.split(/\r?\n/g)
@@ -61,7 +61,7 @@ export default function PoolForm (props) {
       } catch (err) {
         console.error('Failed to parse voter data:')
         console.error(err)
-        updateVoterListError('Format Invalid')
+        setVoterListError('Format Invalid')
         isReady = false
       }
     }
@@ -131,8 +131,8 @@ export default function PoolForm (props) {
                 error={nameError}
                 fullWidth
                 value={poolName}
-                onChange={(e) => { updatePoolName(e.target.value) }}
-                onBlur={() => { updateNameError(false) }}
+                onChange={(e) => { setPoolName(e.target.value) }}
+                onBlur={() => { setNameError(false) }}
               />
             </Grid>
             <Grid item sm={12}>
@@ -144,7 +144,7 @@ export default function PoolForm (props) {
                 variant="outlined"
                 fullWidth
                 value={poolDescription}
-                onChange={(e) => { updatePoolDescription(e.target.value) }}
+                onChange={(e) => { setPoolDescription(e.target.value) }}
               />
             </Grid>
             <Grid item sm={12}>
@@ -152,14 +152,14 @@ export default function PoolForm (props) {
                 id="poolVotersList"
                 label="Voter Info"
                 multiline
-                rows={8}
+                minRows={8}
                 variant="outlined"
                 helperText={voterListError}
                 error={voterListError !== ' '}
                 fullWidth
                 value={rawVoterList}
-                onChange={(e) => { updateRawVoterList(e.target.value) }}
-                onBlur={() => { updateVoterListError(' ') }}
+                onChange={(e) => { setRawVoterList(e.target.value) }}
+                onBlur={() => { setVoterListError(' ') }}
               />
             </Grid>
             <Grid item sm={12}>

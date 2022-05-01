@@ -24,9 +24,15 @@ export default function ConfirmationDialog (props) {
     onClose(true)
   }
 
+  const handleClose = (event, reason) => {
+    if (reason === 'escapeKeyDown' || reason === 'backdropClick') {
+      onClose(false)
+    }
+  }
+
   return (
     <Dialog
-      disableBackdropClick
+      onClose={handleClose}
       disableEscapeKeyDown
       maxWidth="lg"
       aria-labelledby="confirmation-dialog-title"

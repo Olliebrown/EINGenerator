@@ -42,9 +42,9 @@ export default function ElectionDetails (props) {
   const { election, onEdit } = props
   const classes = useStyles()
 
-  const [emailFormOpen, setEmailOpen] = useState(false)
+  const [emailFormOpen, setEmailFormOpen] = useState(false)
   const handleEmailFormToggle = (openState) => {
-    setEmailOpen(openState)
+    setEmailFormOpen(openState)
   }
 
   const [confirmOpen, setConfirmOpen] = useState(false)
@@ -102,7 +102,7 @@ export default function ElectionDetails (props) {
       alert('Please generate EINs first')
       return
     }
-    setEmailOpen(true)
+    setEmailFormOpen(true)
   }
 
   const onSendEmail = (emailFrom, emailSubject, emailText) => {
@@ -163,7 +163,7 @@ export default function ElectionDetails (props) {
         </Typography>
       </Grid>
 
-      <Grid item sm={12} container justify="space-between" spacing={3}>
+      <Grid item sm={12} container justifyContent="space-between" spacing={3}>
         <Grid item>
           <ButtonGroup color="primary" variant="contained" aria-label="election button actions">
             <Button endIcon={<EINIcon />} disabled={EINDefined} onClick={generateEINs}>

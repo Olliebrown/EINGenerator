@@ -1,4 +1,4 @@
-import MongoDB from 'mongodb'
+import { MongoClient, ServerApiVersion } from 'mongodb'
 import DotENV from 'dotenv'
 
 import Debug from 'debug'
@@ -14,17 +14,14 @@ const DB_NAME = (process.env.DB_NAME || 'EINTest')
 const uri = `mongodb+srv://${DB_USER}:${DB_PASS}@berriercluster.m5otq.mongodb.net/?retryWrites=true&w=majority`
 
 // Build the client to be used for all connections
-const client = new MongoDB.MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+// const client = new MongoDB.MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 // Run a query using the provided query callback (receives the database object)
 export async function runQuery (queryCB) {
   // Establish a connection (if not already)
   try {
-    if (!client.isConnected()) {
-      debug('Connecting to mongo ...')
-      await client.connect()
-      debug('... success')
-    }
+    await client.connect()
   } catch (err) {
     debug('Error connecting to mongo', err)
     throw (new Error('Failed to connect to mongodb'))

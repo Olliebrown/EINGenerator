@@ -30,18 +30,18 @@ export default function EINGeneratorApp (props) {
   const [currentTabIndex, setCurrentTabIndex] = useState(0)
 
   // Data from the endpoints
-  const [poolData, updatePoolDate] = useState([])
-  const [poolDataLoading, updatePoolDataLoading] = useState(false)
-  const [electionData, updateElectionDate] = useState([])
-  const [electionDataLoading, updateElectionDataLoading] = useState(false)
+  const [poolData, setPoolData] = useState([])
+  const [poolDataLoading, setPoolDataLoading] = useState(false)
+  const [electionData, setElectionData] = useState([])
+  const [electionDataLoading, setElectionDataLoading] = useState(false)
 
   // Async data retrieval
   const retrievePoolData = async () => {
     try {
-      updatePoolDataLoading(true)
+      setPoolDataLoading(true)
       const newPoolData = await DATA.getList('pool')
-      updatePoolDate(newPoolData)
-      updatePoolDataLoading(false)
+      setPoolData(newPoolData)
+      setPoolDataLoading(false)
     } catch (err) {
       console.error('Error retrieving pool data')
       console.error(err)
@@ -51,10 +51,10 @@ export default function EINGeneratorApp (props) {
 
   const retrieveElectionData = async () => {
     try {
-      updateElectionDataLoading(true)
+      setElectionDataLoading(true)
       const newElectionData = await DATA.getList('election')
-      updateElectionDate(newElectionData)
-      updateElectionDataLoading(false)
+      setElectionData(newElectionData)
+      setElectionDataLoading(false)
     } catch (err) {
       console.error('Error retrieving election data')
       console.error(err)
@@ -84,11 +84,14 @@ export default function EINGeneratorApp (props) {
           <Tab label="Elections" {...a11yProps(1)} />
         </Tabs>
       </AppBar>
+
       <TabPanel value={currentTabIndex} index={0}>
         <ExpandableList type="pool" loading={poolDataLoading} refreshData={retrievePoolData} itemsData={poolData} />
+        {/* <Typography>{'Tab 1'}</Typography> */}
       </TabPanel>
       <TabPanel value={currentTabIndex} index={1}>
         <ExpandableList type="election" loading={electionDataLoading} refreshData={retrieveElectionData} itemsData={electionData} secondaryData={poolData} />
+        {/* <Typography>{'Tab 2'}</Typography> */}
       </TabPanel>
     </div>
   )

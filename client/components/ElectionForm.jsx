@@ -22,18 +22,18 @@ export default function ElectionForm (props) {
   const { modalOpen, onModalToggle, refreshData, voterPools, itemData, isUpdate } = props
 
   // State for managed form inputs
-  const [electionName, updateElectionName] = useState('')
-  const [electionDescription, updateElectionDescription] = useState('')
-  const [startDate, updateStartDate] = useState(moment())
-  const [endDate, updateEndDate] = useState(moment())
-  const [electionPool, updateElectionPool] = useState('')
-  const [formURL, updateFormURL] = useState('')
-  const [sheetURL, updateSheetURL] = useState('')
+  const [electionName, setElectionName] = useState('')
+  const [electionDescription, setElectionDescription] = useState('')
+  const [startDate, setStartDate] = useState(moment())
+  const [endDate, setEndDate] = useState(moment())
+  const [electionPool, setElectionPool] = useState('')
+  const [formURL, setFormURL] = useState('')
+  const [sheetURL, setSheetURL] = useState('')
 
   // Form field error states
-  const [nameError, updateNameError] = useState(false)
-  const [endDateError, updateEndDateError] = useState(' ')
-  const [disablePool, updateDisablePool] = useState(false)
+  const [nameError, setNameError] = useState(false)
+  const [endDateError, setEndDateError] = useState(' ')
+  const [disablePool, setDisablePool] = useState(false)
 
   // Lookup data if we are editing an existing item
   useEffect(() => {
@@ -43,16 +43,16 @@ export default function ElectionForm (props) {
         try {
           const electionInfo = await DATA.getItem('election', itemData._id)
           console.log('Election Info', electionInfo)
-          updateElectionName(electionInfo.name || '')
-          updateElectionDescription(electionInfo.description || '')
-          updateStartDate(moment(electionInfo.startDate))
-          updateEndDate(moment(electionInfo.endDate))
-          updateElectionPool(electionInfo.poolID || '')
-          updateFormURL(electionInfo.formURL || '')
-          updateSheetURL(electionInfo.sheetURL || '')
+          setElectionName(electionInfo.name || '')
+          setElectionDescription(electionInfo.description || '')
+          setStartDate(moment(electionInfo.startDate))
+          setEndDate(moment(electionInfo.endDate))
+          setElectionPool(electionInfo.poolID || '')
+          setFormURL(electionInfo.formURL || '')
+          setSheetURL(electionInfo.sheetURL || '')
 
           if (electionInfo.EIN) {
-            updateDisablePool(true)
+            setDisablePool(true)
           }
         } catch (err) {
           alert('Error looking up election "' + itemData._id + '"')
@@ -71,13 +71,13 @@ export default function ElectionForm (props) {
 
     // Check the pool name
     if (electionName === '') {
-      updateNameError(true)
+      setNameError(true)
       isReady = false
     }
 
     // Process the raw voter list data
     if (!startDate.isSameOrBefore(endDate)) {
-      updateEndDateError('End Date must be after start')
+      setEndDateError('End Date must be after start')
       isReady = false
     }
 
@@ -92,8 +92,8 @@ export default function ElectionForm (props) {
         startDate: startDate.toDate(),
         endDate: endDate.toDate(),
         poolID: electionPool,
-        sheetURL: sheetURL,
-        formURL: formURL
+        sheetURL,
+        formURL
       })
     } else {
       await DATA.newItem('election', {
@@ -102,8 +102,8 @@ export default function ElectionForm (props) {
         startDate: startDate.toDate(),
         endDate: endDate.toDate(),
         poolID: electionPool,
-        sheetURL: sheetURL,
-        formURL: formURL
+        sheetURL,
+        formURL
       })
     }
     if (refreshData) {
@@ -140,8 +140,8 @@ export default function ElectionForm (props) {
                 error={nameError}
                 fullWidth
                 value={electionName}
-                onChange={(e) => { updateElectionName(e.target.value) }}
-                onBlur={() => { updateNameError(false) }}
+                onChange={(e) => { setElectionName(e.target.value) }}
+                onBlur={() => { setNameError(false) }}
               />
             </Grid>
             <Grid item sm={12}>
@@ -153,7 +153,7 @@ export default function ElectionForm (props) {
                 variant="outlined"
                 fullWidth
                 value={electionDescription}
-                onChange={(e) => { updateElectionDescription(e.target.value) }}
+                onChange={(e) => { setElectionDescription(e.target.value) }}
               />
             </Grid>
             <Grid item sm={6}>
@@ -165,7 +165,7 @@ export default function ElectionForm (props) {
                 variant="outlined"
                 fullWidth
                 value={formURL}
-                onChange={(e) => { updateFormURL(e.target.value) }}
+                onChange={(e) => { setFormURL(e.target.value) }}
               />
             </Grid>
             <Grid item sm={6}>
@@ -177,7 +177,7 @@ export default function ElectionForm (props) {
                 variant="outlined"
                 fullWidth
                 value={sheetURL}
-                onChange={(e) => { updateSheetURL(e.target.value) }}
+                onChange={(e) => { setSheetURL(e.target.value) }}
               />
             </Grid>
             <Grid item sm={6}>
@@ -190,7 +190,7 @@ export default function ElectionForm (props) {
                 fullWidth
                 InputLabelProps={{ shrink: true }}
                 value={startDate.format('yyyy-MM-DDThh:mm')}
-                onChange={(e) => { updateStartDate(moment(e.target.value)) }}
+                onChange={(e) => { setStartDate(moment(e.target.value)) }}
               />
             </Grid>
             <Grid item sm={6}>
@@ -205,8 +205,8 @@ export default function ElectionForm (props) {
                 fullWidth
                 InputLabelProps={{ shrink: true }}
                 value={endDate.format('yyyy-MM-DDThh:mm')}
-                onChange={(e) => { updateEndDate(moment(e.target.value)) }}
-                onBlur={() => { updateEndDateError(' ') }}
+                onChange={(e) => { setEndDate(moment(e.target.value)) }}
+                onBlur={() => { setEndDateError(' ') }}
               />
             </Grid>
             <Grid item sm={12}>
@@ -218,7 +218,7 @@ export default function ElectionForm (props) {
                   labelId="poolSelectLabel"
                   id="poolSelect"
                   value={electionPool}
-                  onChange={(e) => { updateElectionPool(e.target.value) }}
+                  onChange={(e) => { setElectionPool(e.target.value) }}
                   label={disablePool ? 'Voter Pool (EINs already generated)' : 'Voter Pool'}
                   disabled={disablePool}
                 >
