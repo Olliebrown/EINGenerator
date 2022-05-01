@@ -15,7 +15,7 @@ const uri = `mongodb+srv://${DB_USER}:${DB_PASS}@berriercluster.m5otq.mongodb.ne
 
 // Build the client to be used for all connections
 // const client = new MongoDB.MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true })
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 })
 
 // Run a query using the provided query callback (receives the database object)
 export async function runQuery (queryCB) {
