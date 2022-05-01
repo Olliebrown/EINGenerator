@@ -5,6 +5,7 @@ import VoterRouter from './api/voterRouter.js'
 import PoolRouter from './api/poolRouter.js'
 import ElectionRouter from './api/electionRouter.js'
 import EmailServiceRouter from './api/emailServiceRouter.js'
+import authorizationRouter from './api/authorizationRouter.js'
 
 const debug = Debug('server:main')
 const app = new Express()
@@ -19,6 +20,7 @@ app.use((req, res, next) => {
 app.use('/voter', VoterRouter)
 app.use('/pool', PoolRouter)
 app.use('/election', ElectionRouter)
+app.use('/auth', authorizationRouter)
 
 // Backend service API
 app.use('/email', EmailServiceRouter)
@@ -27,6 +29,6 @@ app.use('/email', EmailServiceRouter)
 app.use('/', Express.static('./public'))
 
 // Start listening for requests
-app.listen(3000, () => {
-  debug('Express listening on port 3000')
+app.listen(process.env.PORT || 3000, () => {
+  debug(`Express listening on port ${process.env.PORT || 3000}`)
 })
