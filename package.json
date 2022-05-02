@@ -5,9 +5,11 @@
   "main": "server/server.js",
   "type": "module",
   "scripts": {
+    "build": "run-s cleanClient bundle",
+    "start": "run-s server",
     "devServer": "env DEBUG=server:*,mongo:* nodemon --watch server server/server.js",
     "devClient": "run-s cleanClient devBundle",
-    "start": "node server/server.js",
+    "server": "node server/server.js",
     "client": "run-s cleanClient bundle",
     "cleanClient": "rm -f ./public/app.*",
     "devBundle": "esbuild --watch --bundle --sourcemap --target=es6 --define:process.env.NODE_ENV=\\\"development\\\" --outdir=./public client/app.jsx",

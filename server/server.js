@@ -20,10 +20,10 @@ app.use((req, res, next) => {
 app.use('/voter', VoterRouter)
 app.use('/pool', PoolRouter)
 app.use('/election', ElectionRouter)
-app.use('/auth', authorizationRouter)
 
 // Backend service API
 app.use('/email', EmailServiceRouter)
+app.use('/auth', authorizationRouter)
 
 // Statically served files
 app.use('/', Express.static('./public'))
