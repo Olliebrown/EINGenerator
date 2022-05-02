@@ -28,7 +28,7 @@ export default function ElectionForm (props) {
   const [endDate, setEndDate] = useState(moment())
   const [electionPool, setElectionPool] = useState('')
   const [formURL, setFormURL] = useState('')
-  const [sheetURL, setSheetURL] = useState('')
+  const [sheetID, setSheetID] = useState('')
 
   // Form field error states
   const [nameError, setNameError] = useState(false)
@@ -49,7 +49,7 @@ export default function ElectionForm (props) {
           setEndDate(moment(electionInfo.endDate))
           setElectionPool(electionInfo.poolID || '')
           setFormURL(electionInfo.formURL || '')
-          setSheetURL(electionInfo.sheetURL || '')
+          setSheetID(electionInfo.sheetURL || '')
 
           if (electionInfo.EIN) {
             setDisablePool(true)
@@ -92,7 +92,7 @@ export default function ElectionForm (props) {
         startDate: startDate.toDate(),
         endDate: endDate.toDate(),
         poolID: electionPool,
-        sheetURL,
+        sheetURL: sheetID,
         formURL
       })
     } else {
@@ -102,7 +102,7 @@ export default function ElectionForm (props) {
         startDate: startDate.toDate(),
         endDate: endDate.toDate(),
         poolID: electionPool,
-        sheetURL,
+        sheetURL: sheetID,
         formURL
       })
     }
@@ -171,13 +171,13 @@ export default function ElectionForm (props) {
             <Grid item sm={6}>
               <TextField
                 margin="dense"
-                id="resultsSheetURL"
-                label="Results Spreadsheet URL"
-                type="url"
+                id="resultsSheetID"
+                label="Results Spreadsheet ID"
+                type="text"
                 variant="outlined"
                 fullWidth
-                value={sheetURL}
-                onChange={(e) => { setSheetURL(e.target.value) }}
+                value={sheetID}
+                onChange={(e) => { setSheetID(e.target.value) }}
               />
             </Grid>
             <Grid item sm={6}>

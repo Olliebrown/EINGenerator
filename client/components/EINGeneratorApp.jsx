@@ -1,5 +1,3 @@
-import EventEmitter from 'eventemitter3'
-
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
@@ -126,9 +124,9 @@ export default function EINGeneratorApp (props) {
           <Tab
             className={classes.rightAlign}
             onClick={onAccountButtonClick}
-            enabled={isInitialized}
+            disabled={!isInitialized}
             icon={
-              <Badge color="primary" variant="dot" invisible={!isAuthorized}>
+              <Badge color="primary" variant="dot" invisible={!isAuthorized} overlap="rectangular">
                 <AccountCircleIcon />
               </Badge>
             }
@@ -138,17 +136,15 @@ export default function EINGeneratorApp (props) {
 
       <TabPanel value={currentTabIndex} index={0}>
         <ExpandableList type="pool" loading={poolDataLoading} refreshData={retrievePoolData} itemsData={poolData} />
-        {/* <Typography>{'Tab 1'}</Typography> */}
       </TabPanel>
 
       <TabPanel value={currentTabIndex} index={1}>
-        <ExpandableList type="election" loading={electionDataLoading} refreshData={retrieveElectionData} itemsData={electionData} secondaryData={poolData} />
-        {/* <Typography>{'Tab 2'}</Typography> */}
+        <ExpandableList type="election" loading={electionDataLoading} refreshData={retrieveElectionData} itemsData={electionData} secondaryData={poolData} isAuthorized={isAuthorized} />
       </TabPanel>
     </div>
   )
 }
 
 EINGeneratorApp.propTypes = {
-  authEmitter: PropTypes.objectOf(EventEmitter).isRequired
+  authEmitter: PropTypes.object.isRequired
 }

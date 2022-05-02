@@ -11,10 +11,12 @@ import ButtonGroup from '@material-ui/core/ButtonGroup'
 import Icon from '@material-ui/core/Icon'
 import Link from '@material-ui/core/Link'
 
+import ElectionStatus from './ElectionStatus.jsx'
 import ConfirmationDialog from './ConfirmationDialog.jsx'
 import EmailForm from './EmailForm.jsx'
 
 import * as DATA from '../helpers/dataHelper.js'
+import { getElectionStatus } from '../helpers/statusHelper.js'
 
 // String for formatting dates with moment.js
 const FMT_STRING = ' MMMM Do YYYY, h:mm a '
@@ -39,14 +41,19 @@ function EditIcon () { return (<Icon>{'edit'}</Icon>) }
 
 export default function ElectionDetails (props) {
   // Destructure props and create class names
-  const { election, onEdit } = props
+  const { election, isAuthorized, onEdit } = props
   const classes = useStyles()
 
+  // Election status info
+  const [electionStatus, setElectionStatus] = useState(null)
+
+  // Email form dialog state
   const [emailFormOpen, setEmailFormOpen] = useState(false)
   const handleEmailFormToggle = (openState) => {
     setEmailFormOpen(openState)
   }
 
+  // Confirmation dialog state
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [confirmState, setConfirmState] = useState(oldConfirmState)
 
@@ -61,8 +68,8 @@ export default function ElectionDetails (props) {
     const checkStatus = async () => {
       if (election?.EIN && Object.keys(election.EIN).length > 0 && election.sheetURL && election.sheetURL !== '') {
         try {
-          const status = await DATA.getElectionStatus(election.sheetURL, election.EIN)
-          console.log(status)
+          const status = await getElectionStatus(election.sheetURL, election.EIN)
+          setElectionStatus(status)
         } catch (err) {
           alert('Error retrieving results')
           console.error('Error retrieving results')
@@ -71,8 +78,10 @@ export default function ElectionDetails (props) {
       }
     }
 
-    checkStatus()
-  }, [election?.sheetURL, election?.EIN])
+    if (isAuthorized) {
+      checkStatus()
+    }
+  }, [isAuthorized, election?.sheetURL, election?.EIN])
 
   // Callback for generating EINs
   const generateEINs = () => {
@@ -138,15 +147,19 @@ export default function ElectionDetails (props) {
   return (
     <>
       <Grid item sm={12} container spacing={3}>
+        <Grid item sm={12}>
+          {electionStatus &&
+            <ElectionStatus status={electionStatus} />}
+        </Grid>
         <Grid item>
           {formURLDefined
-            ? <Link href={election.formURL} target={'_blank'} variant={'body1'}>{'Voting Form'}</Link>
-            : <Typography>{'No voting form URL set'}</Typography>}
+            ? <Link href={election.formURL} target={'_blank'} variant={'body1'}>{'Form'}</Link>
+            : <Typography>{'No form URL'}</Typography>}
         </Grid>
         <Grid item>
           {resultsURLDefined
-            ? <Link href={election.sheetURL} target={'_blank'} variant={'body1'}>{'Results Spreadsheet'}</Link>
-            : <Typography>{'No results spreadsheet URL set'}</Typography>}
+            ? <Link href={`https://docs.google.com/spreadsheets/d/${election.sheetURL}`} target={'_blank'} variant={'body1'}>{'Results'}</Link>
+            : <Typography>{'No spreadsheet ID'}</Typography>}
         </Grid>
       </Grid>
 
@@ -215,9 +228,11 @@ ElectionDetails.propTypes = {
     sheetURL: PropTypes.string,
     emailJobs: PropTypes.arrayOf(PropTypes.string)
   }).isRequired,
+  isAuthorized: PropTypes.bool,
   onEdit: PropTypes.func
 }
 
 ElectionDetails.defaultProps = {
+  isAuthorized: false,
   onEdit: null
 }

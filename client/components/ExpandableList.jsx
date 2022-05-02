@@ -46,7 +46,7 @@ const SKELETON_COUNT = 5
 
 export default function ExpandableList (props) {
   // Destructure props
-  const { loading, itemsData, secondaryData, type, refreshData } = props
+  const { loading, isAuthorized, itemsData, secondaryData, type, refreshData } = props
 
   // Generate style class names
   const classes = useStyles()
@@ -127,6 +127,7 @@ export default function ExpandableList (props) {
         <ItemViewDetails
           itemID={itemData._id}
           type={type}
+          isAuthorized={isAuthorized}
           onEdit={onEdit}
         />
       </Accordion>
@@ -168,6 +169,7 @@ const dataShape = {
 
 ExpandableList.propTypes = {
   loading: PropTypes.bool,
+  isAuthorized: PropTypes.bool,
   itemsData: PropTypes.arrayOf(
     PropTypes.shape(dataShape)
   ),
@@ -180,6 +182,7 @@ ExpandableList.propTypes = {
 
 ExpandableList.defaultProps = {
   loading: false,
+  isAuthorized: false,
   itemsData: [],
   secondaryData: [],
   type: 'none',

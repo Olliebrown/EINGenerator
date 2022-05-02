@@ -57,15 +57,3 @@ export function sendEmails (electionID, emailFrom, emailSubject, emailText) {
       .catch((error) => { reject(error) })
   })
 }
-
-export function getElectionStatus (resultsSheetURL, EINObject) {
-  return new Promise((resolve, reject) => {
-    Axios.get(`${resultsSheetURL}/export?format=csv`)
-      .then((result) => {
-        console.log('CSV Data')
-        console.log(result.data)
-        resolve()
-      })
-      .catch((error) => { reject(error) })
-  })
-}
