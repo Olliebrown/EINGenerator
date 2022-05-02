@@ -8,6 +8,10 @@
         "plugin:react/all",
         "standard"
     ],
+    "globals": {
+      "gapi": false,
+      "google": false
+    },
     "settings": {
       "react": {
         "version": "detect"
