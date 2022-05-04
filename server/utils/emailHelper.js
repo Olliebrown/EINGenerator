@@ -52,11 +52,16 @@ const MDReader = new Commonmark.Parser({ smart: true })
 const MDWriter = new Commonmark.HtmlRenderer()
 
 // Create the email job and start sending email asynchronously
-export function startEmailJob (electionID, emailFrom, emailSubject, emailText) {
+export function startEmailJob (electionID, emailFrom, emailSubject, emailText, emailType, voterEINList) {
   return new Promise((resolve, reject) => {
+    // Confirm voter list
+    if (!Array.isArray(voterEINList) || voterEINList.length < 1) {
+      reject(new Error('Invalid voter list. Must be an array of at least length 1.'))
+    }
+
     // Construct a new email job object
     const newEmailJob = new EmailJob({
-      id: '*', electionID, from: emailFrom, subject: emailSubject, bodyText: emailText
+      id: '*', electionID, from: emailFrom, subject: emailSubject, bodyText: emailText, emailType, voterEINList
     })
 
     // Generate and return an ID
@@ -86,8 +91,18 @@ export async function sendEmails (emailJob) {
     return
   }
 
+  // Filter the voters list to match the EIN list
+  const votersFiltered = voters.filter((voter) => {
+    // Lookup this voter's EIN
+    const EINList = election.EIN[voter.id]
+    const curEIN = EINList[EINList.length - 1]
+
+    // Is that EIN in the email job list?
+    return (emailJob.voterEINList.findIndex((item) => curEIN === item) >= 0)
+  })
+
   // Update job with expected number of emails
-  emailJob.expected = voters.length
+  emailJob.expected = votersFiltered.length
 
   // Create the nodemailer transport object
   const transporter = nodemailer.createTransport(
@@ -108,18 +123,18 @@ export async function sendEmails (emailJob) {
   }
 
   // Start sending emails
-  debug(`Sending ${voters.length} email(s):`)
-  for (let i = 0; i < voters.length; i++) {
+  debug(`Sending ${votersFiltered.length} email(s):`)
+  for (let i = 0; i < votersFiltered.length; i++) {
     // Gather needed data
-    const to = voters[i].email
+    const to = votersFiltered[i].email
 
     // Fill in template (if exists)
     let compiledBodyText = emailJob.bodyText
     if (msgTemplate) {
       compiledBodyText = msgTemplate({
-        EIN: election.EIN[voters[i]._id][0],
-        voter: voters[i],
-        election: election
+        EIN: election.EIN[votersFiltered[i]._id][0],
+        voter: votersFiltered[i],
+        election
       })
     }
 
@@ -127,11 +142,11 @@ export async function sendEmails (emailJob) {
     try {
       debug(`> Sending ${(SMTP_SEND ? '' : 'TEST')} email to '${to}'`)
       const messageInfo = await sendOneEmail(transporter, to, emailJob.from, emailJob.subject, compiledBodyText)
-      emailJob.addStatus(messageInfo, voters[i]._id, voters[i].email)
+      emailJob.addStatus(messageInfo, votersFiltered[i]._id, votersFiltered[i].email)
     } catch (err) {
       debug('      Error sending')
       debug(err)
-      emailJob.addFailure(err, voters[i]._id, voters[i].email)
+      emailJob.addFailure(err, votersFiltered[i]._id, votersFiltered[i].email)
     }
 
     // Update email job status
@@ -164,9 +179,9 @@ function sendOneEmail (transporter, to, from, subject, bodyText, templateData = 
   // Send the email
   return new Promise((resolve, reject) => {
     transporter.sendMail({
-      from: from,
-      to: to,
-      subject: subject,
+      from,
+      to,
+      subject,
       text: bodyText,
       html: bodyHTML
     }, (err, info) => {

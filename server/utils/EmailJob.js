@@ -2,7 +2,7 @@ import Debug from 'debug'
 const debug = Debug('server:EmailJob')
 
 export default class EmailJob {
-  constructor ({ id, _id, electionID, from, subject, bodyText, successCount, pendingCount, failedCount, status, expected }) {
+  constructor ({ id, _id, electionID, voterEINList, emailType, from, subject, bodyText, successCount, pendingCount, failedCount, status, expected }) {
     if (id === undefined && _id === undefined) {
       debug('id cannot be undefined for a new Email Job')
       throw new Error('id cannot be undefined for a new Email Job')
@@ -21,6 +21,8 @@ export default class EmailJob {
     this.from = from || 'error@bad.com'
     this.subject = subject || 'No subject provided'
     this.bodyText = bodyText || 'no email body provided'
+    this.emailType = emailType || 'UNKNOWN'
+    this.voterEINList = voterEINList || []
 
     // Count of email job progress
     this.expected = expected || 0

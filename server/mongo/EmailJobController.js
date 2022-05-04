@@ -11,13 +11,13 @@ export { closeClient }
 export function addEmailJob (newJob) {
   return new Promise((resolve, reject) => {
     // Ensure we have a valid electionID
-    if (!newJob.electionID || !MongoDB.ObjectID.isValid(newJob.electionID)) {
+    if (!newJob.electionID || !MongoDB.ObjectId.isValid(newJob.electionID)) {
       return reject(new Error('Improperly formed job'))
     }
 
     // Sanitize document before inserting
     const newJobDoc = {
-      electionID: new MongoDB.ObjectID(newJob.electionID),
+      electionID: new MongoDB.ObjectId(newJob.electionID),
       from: newJob.from,
       subject: newJob.subject,
       bodyText: newJob.bodyText,
@@ -32,7 +32,7 @@ export function addEmailJob (newJob) {
     runQuery(async (db) => {
       try {
         // Validate the election id
-        const election = await db.collection('elections').findOne({ _id: new MongoDB.ObjectID(newJob.electionID) })
+        const election = await db.collection('elections').findOne({ _id: new MongoDB.ObjectId(newJob.electionID) })
         if (election === null) {
           return reject(new Error(`Invalid electionID ${newJob.electionID})`))
         }

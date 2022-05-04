@@ -2,6 +2,7 @@ import Express from 'express'
 import MongoDB from 'mongodb'
 import Debug from 'debug'
 
+import * as DATA_HELP from '../utils/dataHelper.js'
 import * as EMAIL_HELP from '../utils/emailHelper.js'
 
 const debug = Debug('server:emailService')
@@ -39,10 +40,17 @@ router.post('/send', Express.json({ type: '*/*' }), async (req, res) => {
   }
 
   // Destructure the body
-  const { electionID, emailSubject, emailFrom, emailText } = req.body
+  const { electionID, emailSubject, emailFrom, emailText, voterList } = req.body
+
+  // If no voter list is provided, assume all voters should be included
+  let voterEINList = voterList
+  if (voterEINList === undefined) {
+    const [election] = await DATA_HELP.getElectionDetails(electionID, false)
+    voterEINList = Object.values(election.EIN).map((EINs) => (EINs[EINs.length - 1]))
+  }
 
   // Start the email send job
-  const emailJobID = await EMAIL_HELP.startEmailJob(electionID, emailFrom, emailSubject, emailText)
+  const emailJobID = await EMAIL_HELP.startEmailJob(electionID, emailFrom, emailSubject, emailText, voterEINList)
   return res.json({
     success: true, message: 'Email send job started', id: emailJobID
   })

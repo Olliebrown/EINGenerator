@@ -11,9 +11,37 @@ import TextField from '@material-ui/core/TextField'
 import TinyMarkdownEditor from './TinyMarkdownEditor.jsx'
 import DialogForm from './DialogForm.jsx'
 
+// Different types of emails
+export const EMAIL_TYPE = {
+  INITIAL: 'INITIAL',
+  REMINDERS: 'REMINDERS',
+  THANK_YOUS: 'THANK_YOUS',
+  NOT_SET: 'NOT_SET'
+}
+
+// Adjustments to the dialog for the different types
+const dialogStrings = {
+  INITIAL: {
+    title: 'Email Voters',
+    description: 'This will send out an initial email to all voters in the election.'
+  },
+  REMINDERS: {
+    title: 'Email Reminders',
+    description: 'This will send out a reminder email to anyone that has NOT yet voted.'
+  },
+  THANK_YOUS: {
+    title: 'Email Thank You',
+    description: 'This will send out a thank you email to anyone that HAS voted.'
+  },
+  NOT_SET: {
+    title: 'Email Type Error',
+    description: 'ERROR: The email type was not properly set'
+  }
+}
+
 export default function EmailForm (props) {
   // Destructure props
-  const { modalOpen, onModalToggle, onSend } = props
+  const { modalOpen, onModalToggle, onSend, type } = props
 
   // Markdown element state
   const [emailFrom, setEmailFrom] = useState('')
@@ -36,17 +64,20 @@ export default function EmailForm (props) {
     }
 
     if (emailFrom.trim() === '') {
-      setEmailFromError('Email subject cannot be blank')
+      setEmailFromError('field cannot be blank')
       isValid = false
     } else {
+      // Try to separate name and email (assuming both were included)
       const matches = emailFrom.match(/(?<name>.*)<(?<email>.*)>/)
       if (matches === null) {
+        // No match, so try treating it as just an email with a basic email regex
         // eslint-disable-next-line no-useless-escape
         if (!emailFrom.match(/^[^@\s]+@[^@\s\.]+\.[^@\.\s]+$/)) {
           setEmailFromError('Must be a valid email address')
           isValid = false
         }
       } else {
+        // Do a basic email regex on the email
         const rawEmail = matches.groups.email?.trim()
         // eslint-disable-next-line no-useless-escape
         if (!rawEmail.match(/^[^@\s]+@[^@\s\.]+\.[^@\.\s]+$/)) {
@@ -67,20 +98,22 @@ export default function EmailForm (props) {
     if (onSend) { onSend(emailFrom, emailSubject, emailText) }
   }
 
+  const typeStrings = dialogStrings[type]
+
   return (
     <DialogForm
       addLabel="Send Email"
       onToggle={onModalToggle}
       open={modalOpen}
       onFormSubmit={formSubmitted}
-      title="Email Voters"
+      title={typeStrings.title}
       type="email"
       maxWidth="md"
       fullWidth
     >
       <DialogContent>
         <DialogContentText>
-          {'This will send an email to all voters in the election.'}
+          {typeStrings.description}
         </DialogContentText>
         <Grid container spacing={1}>
           <Grid item sm={12}>
@@ -130,9 +163,11 @@ export default function EmailForm (props) {
 EmailForm.propTypes = {
   modalOpen: PropTypes.bool.isRequired,
   onModalToggle: PropTypes.func.isRequired,
+  type: PropTypes.oneOf(Object.keys(EMAIL_TYPE)),
   onSend: PropTypes.func
 }
 
 EmailForm.defaultProps = {
-  onSend: null
+  onSend: null,
+  type: EMAIL_TYPE.NOT_SET
 }

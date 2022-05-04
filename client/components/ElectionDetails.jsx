@@ -13,7 +13,7 @@ import Link from '@material-ui/core/Link'
 
 import ElectionStatus from './ElectionStatus.jsx'
 import ConfirmationDialog from './ConfirmationDialog.jsx'
-import EmailForm from './EmailForm.jsx'
+import EmailForm, { EMAIL_TYPE } from './EmailForm.jsx'
 
 import * as DATA from '../helpers/dataHelper.js'
 import { getElectionStatus } from '../helpers/statusHelper.js'
@@ -48,6 +48,7 @@ export default function ElectionDetails (props) {
   const [electionStatus, setElectionStatus] = useState(null)
 
   // Email form dialog state
+  const [emailType, setEmailType] = useState(EMAIL_TYPE.NOT_SET)
   const [emailFormOpen, setEmailFormOpen] = useState(false)
   const handleEmailFormToggle = (openState) => {
     setEmailFormOpen(openState)
@@ -106,17 +107,31 @@ export default function ElectionDetails (props) {
     setConfirmOpen(true)
   }
 
-  const showEmailForm = () => {
+  const showEmailForm = (newType) => {
     if (!EINDefined) {
       alert('Please generate EINs first')
       return
     }
+
+    setEmailType(newType)
     setEmailFormOpen(true)
   }
 
   const onSendEmail = (emailFrom, emailSubject, emailText) => {
-    const voterCount = (EINDefined ? Object.keys(election.EIN).length : 0)
+    // Lookup various voter counts
+    const fullVoterCount = (EINDefined ? Object.keys(election.EIN).length : 0)
+    const completedVoterCount = (electionStatus ? electionStatus.responses.length : 0)
+    const remainingVoterCount = (electionStatus ? electionStatus.remaining.length : 0)
+
+    // Set count value and plural string
+    let voterCount = 0
+    switch (emailType) {
+      case EMAIL_TYPE.INITIAL: voterCount = fullVoterCount; break
+      case EMAIL_TYPE.REMINDERS: voterCount = remainingVoterCount; break
+      case EMAIL_TYPE.THANK_YOUS: voterCount = completedVoterCount; break
+    }
     const plural = (voterCount === 1 ? 'voter' : 'voters')
+
     setConfirmState({
       title: 'Send Election Emails',
       message: `Are you sure you want to send emails to ${voterCount} ${plural} for election ${election.name}?`,
@@ -182,7 +197,7 @@ export default function ElectionDetails (props) {
             <Button endIcon={<EINIcon />} disabled={EINDefined} onClick={generateEINs}>
               {'Generate EINs'}
             </Button>
-            <Button endIcon={<SendIcon />} disabled={!EINDefined} onClick={showEmailForm}>
+            <Button endIcon={<SendIcon />} disabled={!EINDefined} onClick={() => showEmailForm(EMAIL_TYPE.INITIAL)}>
               {'Send Emails'}
             </Button>
           </ButtonGroup>
@@ -190,10 +205,10 @@ export default function ElectionDetails (props) {
 
         <Grid item>
           <ButtonGroup color="primary" variant="contained" aria-label="election button actions">
-            <Button endIcon={<RemindIcon />} disabled={!EINDefined || !resultsURLDefined} onClick={showEmailForm}>
+            <Button endIcon={<RemindIcon />} disabled={!EINDefined || !resultsURLDefined} onClick={() => showEmailForm(EMAIL_TYPE.REMINDERS)}>
               {'Send Reminders'}
             </Button>
-            <Button endIcon={<ThankYouIcon />} disabled={!EINDefined || !resultsURLDefined} onClick={showEmailForm}>
+            <Button endIcon={<ThankYouIcon />} disabled={!EINDefined || !resultsURLDefined} onClick={() => showEmailForm(EMAIL_TYPE.THANK_YOUS)}>
               {'Send Thank Yous'}
             </Button>
           </ButtonGroup>
@@ -206,7 +221,7 @@ export default function ElectionDetails (props) {
         </Grid>
       </Grid>
 
-      <EmailForm modalOpen={emailFormOpen} onModalToggle={handleEmailFormToggle} onSend={onSendEmail} />
+      <EmailForm modalOpen={emailFormOpen} type={emailType} onModalToggle={handleEmailFormToggle} onSend={onSendEmail} />
 
       <ConfirmationDialog title={confirmState.title} open={confirmOpen} onClose={confirmState.handleClose}>
         {confirmState.message}
