@@ -19,9 +19,24 @@ EINGenerator is built around some common Web 2.0 technologies.  You will need th
 - A working mongodb instance and credentials (free cloud account works fine)
 - A send-in-blue account and credentials (free can work for reasonably sized voter pools)
 
-Secrets need to be defined in `.env` as follows:
-- 
+## Configuration
+Secrets need to be defined in a `.env` file in the root directory as follows:
+- DB_USER: The username for the mongodb account
+- DB_PASS: The plaintext password for the mongodb account
+- DB_NAME: The name of the database to use in the mongodb account
+- SIB_SMTP_USER: The send-in-blue account username
+- SIB_SMTP_PW: The send-in-blue account plaintext password
+- SMTP_SEND: Can be 'true' or 'false' (set to 'false' to simulate instead of sending)
+- SHEETS_APP_ID: The google sheets app ID for accessing the google forms results sheet.
+- SHEETS_CLIENT_ID: The client account under the google app ID
+- SHEETS_CLIENT_SECRET: The secret token for the google app ID client account
+- SHEETS_REDIRECT_URI: The URI used for redirection after authenticating (must be registered with the given app ID)
 
+If SMTP_SEND is set to false, the system will instead attempt to use etherial email to simulate the sending. You should provide the following credentials in the `.env` file in this case:
+- TEST_SMTP_USER: The etherial email user account
+- TEST_SMTP_PW: The password for the etherial email account
+
+## Running
 Starting up the program is as follows:
 - Clone the repo or download the latest code
 - run `npm install` in the root direclty to install needed dependencies
