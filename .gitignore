@@ -5,3 +5,4 @@ node_modules
 errors.txt
 TestEmailText.md
 server/secret
+.DS_Store
