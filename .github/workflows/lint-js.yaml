@@ -1,11 +1,4 @@
 name: Code Style/Lint Check
-
-on:
-  push:
-    branches: [ '*' ]
-  pull_request:
-    branches: [ main ]
-
 jobs:
   lint:
     runs-on: ubuntu-latest
