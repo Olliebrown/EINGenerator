@@ -70,6 +70,7 @@ export default function ElectionDetails (props) {
       if (election?.EIN && Object.keys(election.EIN).length > 0 && election.sheetURL && election.sheetURL !== '') {
         try {
           const status = await getElectionStatus(election.sheetURL, election.EIN)
+          console.log({ status })
           setElectionStatus(status)
         } catch (err) {
           alert('Error retrieving results')
@@ -101,6 +102,9 @@ export default function ElectionDetails (props) {
               console.error(err)
               setConfirmOpen(false)
             })
+        } else {
+          // On cancel, close the dialog
+          setConfirmOpen(false)
         }
       }
     })
@@ -124,20 +128,31 @@ export default function ElectionDetails (props) {
     const remainingVoterCount = (electionStatus ? electionStatus.remaining.length : 0)
 
     // Set count value and plural string
-    let voterCount = 0
+    let voterCount = fullVoterCount
+    let voterList = []
+    let typeDescription = 'emails'
+
     switch (emailType) {
-      case EMAIL_TYPE.INITIAL: voterCount = fullVoterCount; break
-      case EMAIL_TYPE.REMINDERS: voterCount = remainingVoterCount; break
-      case EMAIL_TYPE.THANK_YOUS: voterCount = completedVoterCount; break
+      case EMAIL_TYPE.REMINDERS:
+        voterCount = remainingVoterCount
+        voterList = electionStatus.remaining
+        typeDescription = 'REMINDER emails'
+        break
+
+      case EMAIL_TYPE.THANK_YOUS:
+        voterCount = completedVoterCount
+        voterList = electionStatus.responses
+        typeDescription = 'THANK YOU emails'
+        break
     }
     const plural = (voterCount === 1 ? 'voter' : 'voters')
 
     setConfirmState({
       title: 'Send Election Emails',
-      message: `Are you sure you want to send emails to ${voterCount} ${plural} for election ${election.name}?`,
+      message: `Are you sure you want to send ${typeDescription} to ${voterCount} ${plural} for election ${election.name}?`,
       handleClose: (accepted) => {
         if (accepted) {
-          DATA.sendEmails(election._id, emailFrom, emailSubject, emailText)
+          DATA.sendEmails(election._id, emailFrom, emailSubject, emailText, emailType, voterList)
             .then((jobID) => {
               console.log('JOB ID:', jobID)
               alert(`Email job ${jobID.toString()} Created`)
@@ -148,6 +163,8 @@ export default function ElectionDetails (props) {
               console.error(err)
               setConfirmOpen(false)
             })
+        } else {
+          setConfirmOpen(false)
         }
       }
     })

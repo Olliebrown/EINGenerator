@@ -50,9 +50,9 @@ export function generateEINs (electionID) {
   })
 }
 
-export function sendEmails (electionID, emailFrom, emailSubject, emailText) {
+export function sendEmails (electionID, emailFrom, emailSubject, emailText, emailType, voterEINList = null) {
   return new Promise((resolve, reject) => {
-    Axios.post('email/send', { electionID, emailSubject, emailFrom, emailText })
+    Axios.post('email/send', { electionID, emailSubject, emailFrom, emailText, emailType, voterEINList })
       .then((result) => { resolve(result.data.id) })
       .catch((error) => { reject(error) })
   })

@@ -20,7 +20,7 @@ function isValidSendBody ({ electionID, emailSubject, emailFrom, emailText }) {
   }
 
   // Check objectID
-  if (!MongoDB.ObjectID.isValid(electionID)) {
+  if (!MongoDB.ObjectId.isValid(electionID)) {
     debug('Bad electionID')
     return false
   }
@@ -40,17 +40,19 @@ router.post('/send', Express.json({ type: '*/*' }), async (req, res) => {
   }
 
   // Destructure the body
-  const { electionID, emailSubject, emailFrom, emailText, voterList } = req.body
+  const { electionID, emailSubject, emailFrom, emailText, emailType, voterEINList } = req.body
 
   // If no voter list is provided, assume all voters should be included
-  let voterEINList = voterList
-  if (voterEINList === undefined) {
+  let recipientList = voterEINList
+  if (voterEINList === undefined || voterEINList === null) {
     const [election] = await DATA_HELP.getElectionDetails(electionID, false)
-    voterEINList = Object.values(election.EIN).map((EINs) => (EINs[EINs.length - 1]))
+    recipientList = Object.values(election.EIN).map((EINs) => (EINs[EINs.length - 1]))
   }
 
   // Start the email send job
-  const emailJobID = await EMAIL_HELP.startEmailJob(electionID, emailFrom, emailSubject, emailText, voterEINList)
+  debug('Voter list')
+  debug(voterEINList)
+  const emailJobID = await EMAIL_HELP.startEmailJob(electionID, emailFrom, emailSubject, emailText, emailType, recipientList)
   return res.json({
     success: true, message: 'Email send job started', id: emailJobID
   })

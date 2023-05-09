@@ -21,6 +21,8 @@ export function addEmailJob (newJob) {
       from: newJob.from,
       subject: newJob.subject,
       bodyText: newJob.bodyText,
+      emailType: newJob.emailType,
+      voterEINList: newJob.voterEINList,
       expected: newJob.expected || 0,
       successCount: 0,
       pendingCount: 0,
@@ -52,7 +54,7 @@ export function addEmailJob (newJob) {
 // Find specific email job
 export function getEmailJob (emailJobID) {
   // Ensure ID is proper type
-  emailJobID = new MongoDB.ObjectID(emailJobID)
+  emailJobID = new MongoDB.ObjectId(emailJobID)
 
   return new Promise((resolve, reject) => {
     // Run the query itself
@@ -77,7 +79,7 @@ export function getEmailJob (emailJobID) {
 // Update a specific email job
 export function updateEmailJob (emailJobID, newJobDetails) {
   // Ensure ID is proper type
-  emailJobID = new MongoDB.ObjectID(emailJobID)
+  emailJobID = new MongoDB.ObjectId(emailJobID)
 
   return new Promise((resolve, reject) => {
     // Run the query itself

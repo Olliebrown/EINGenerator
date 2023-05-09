@@ -56,7 +56,7 @@ export function startEmailJob (electionID, emailFrom, emailSubject, emailText, e
   return new Promise((resolve, reject) => {
     // Confirm voter list
     if (!Array.isArray(voterEINList) || voterEINList.length < 1) {
-      reject(new Error('Invalid voter list. Must be an array of at least length 1.'))
+      reject(new Error('Invalid voter list. Must be an array of at least length 1.', voterEINList))
     }
 
     // Construct a new email job object
@@ -94,7 +94,12 @@ export async function sendEmails (emailJob) {
   // Filter the voters list to match the EIN list
   const votersFiltered = voters.filter((voter) => {
     // Lookup this voter's EIN
-    const EINList = election.EIN[voter.id]
+    const voterID = voter.id ?? voter._id
+    const EINList = election.EIN[voterID]
+    if (!Array.isArray(EINList) || EINList.length < 1) {
+      debug(`No EIN found for voter ${voterID}`)
+      return false
+    }
     const curEIN = EINList[EINList.length - 1]
 
     // Is that EIN in the email job list?
