@@ -43,3 +43,23 @@ Starting up the program is as follows:
 - run `npm run build` to generate the static client pages
 - run `npm start` to start up the server
 - Visit `http://localhost:3000` to access the tool
+
+## Basic Usage
+Creating an election is a two-step process:
+- Create a new Voter Pool with names and emails (click the plus in the bottom right while on the Voter Pools tab)
+- Create a new Election for that voter pool
+  - You will need a link to a Google form that is set up with the proper questions and a field for the user's EIN to be entered.
+  - You also need a link to a Google sheet with the form results so it can count responses for you.
+
+Sending Emails is as follows:
+- First, generate the EINs for this election (they are unique to every election, not just to every user)
+- Second, click 'send emails' and type or paste in the info for the email
+- Confirm and send and it will email each person in the voter pool
+
+It's usually good to follow up with everyone from your personal email and let them know to look in their clutter and/or spam folders as it often winds up there.
+
+Sending reminders and thank yous:
+- Make sure you've entered the ID of the Google sheet that holds the results
+- Click the small person icon in the upper right and log into a Google account that has access to that sheet
+- Expand the election and look for the 'send thank yous' and 'send reminders' buttons
+- You should be able to click those to send messages to either everyone that already voted or everyone that has not yet voted
