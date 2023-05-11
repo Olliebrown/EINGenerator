@@ -44,14 +44,12 @@ router.post('/send', Express.json({ type: '*/*' }), async (req, res) => {
 
   // If no voter list is provided, assume all voters should be included
   let recipientList = voterEINList
-  if (voterEINList === undefined || voterEINList === null) {
+  if (!Array.isArray(voterEINList) || voterEINList.length < 1) {
     const [election] = await DATA_HELP.getElectionDetails(electionID, false)
     recipientList = Object.values(election.EIN).map((EINs) => (EINs[EINs.length - 1]))
   }
 
   // Start the email send job
-  debug('Voter list')
-  debug(voterEINList)
   const emailJobID = await EMAIL_HELP.startEmailJob(electionID, emailFrom, emailSubject, emailText, emailType, recipientList)
   return res.json({
     success: true, message: 'Email send job started', id: emailJobID
