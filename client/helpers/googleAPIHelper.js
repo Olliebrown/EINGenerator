@@ -8,7 +8,7 @@ const API_KEY = 'AIzaSyCN7LNiG07subhMqGevfmb4-UBEmmmDT7k'
 const DISCOVERY_DOC = 'https://sheets.googleapis.com/$discovery/rest?version=v4'
 
 // Authorization scopes required by the API
-const SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
+const SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly https://www.googleapis.com/auth/userinfo.profile'
 
 // Event communication
 export const authEmitter = new EventEmitter()
@@ -79,6 +79,7 @@ export function doAuthorization (callback) {
     }
 
     authEmitter.emit('authorized')
+    getUserInfo().then(console.log)
     if (callback) {
       callback()
     }
@@ -102,4 +103,25 @@ export function doSignOut () {
     gapi.client.setToken('')
   }
   authEmitter.emit('revoked')
+}
+
+/**
+ * Get the signed in user's profile information (must be logged in first)
+ * @returns {Promise} Resolves to the user's profile information
+ */
+export async function getUserInfo () {
+  // Send request to standard userinfo endpoint
+  const response = await fetch('https://www.googleapis.com/userinfo/v2/me', {
+    headers: {
+      Authorization: `Bearer ${gapi.client.getToken().access_token}`
+    }
+  })
+
+  if (response.status >= 400) {
+    throw new Error(`Failed to retrieve user info (status ${response.status})`)
+  }
+
+  // Parse the response to a json object
+  const userData = await response.json()
+  return userData
 }
